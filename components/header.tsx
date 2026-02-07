@@ -28,24 +28,22 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 bg-primary shadow-2xl transition-all duration-300">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20 md:h-[88px]">
+        <div className="flex items-center justify-between h-24 md:h-[88px]">
 
           {/* Logo Area - Left */}
           <div
-            className="flex items-center gap-3 cursor-pointer group flex-shrink-0"
+            className="cursor-pointer group flex-shrink-0"
             onClick={() => setCurrentPage("home")}
           >
-            <div className="relative bg-white/10 p-2 rounded-xl backdrop-blur-sm group-hover:bg-white/20 transition-all duration-300">
-              <ShoppingBasket className="h-8 w-8 md:h-9 md:w-9 text-secondary" />
-              <Star className="h-4 w-4 md:h-4 md:w-4 text-secondary absolute -top-1 -right-1 fill-secondary animate-pulse" />
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-baseline">
-                <span className="text-secondary font-extrabold text-2xl tracking-tighter leading-none">Ana</span>
-                <span className="text-white font-extrabold text-2xl tracking-tighter leading-none ml-1">Risorlange</span>
-              </div>
-              <span className="text-white/60 text-[10px] font-semibold tracking-[0.3em] uppercase -mt-0.5 ml-0.5">Supermercado</span>
-            </div>
+            <Image
+              src="/logo/logo_horizontal.png"
+              alt="Ana Risorlange Supermercado"
+              width={240}
+              height={60}
+              className="h-11 md:h-12 w-auto transition-all duration-300 group-hover:scale-105"
+              priority
+              unoptimized
+            />
           </div>
 
           {/* Desktop Navigation - Centered */}
@@ -107,15 +105,24 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
             </div>
           </div>
 
-          {/* Mobile Menu Button - Visible only on mobile */}
+          {/* Mobile Menu Button - Visible only on mobile - PREMIUM HIGHLIGHT */}
           <div className="xl:hidden">
             <Button
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-white/10"
+              className="relative h-14 w-14 rounded-2xl bg-gradient-to-br from-secondary via-orange-600 to-red-600 text-white shadow-[0_8px_24px_rgba(255,102,0,0.4)] hover:shadow-[0_12px_32px_rgba(255,102,0,0.6)] border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 active:scale-95 group overflow-hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+              {/* Animated glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+              {/* Pulse ring animation */}
+              <div className="absolute inset-0 rounded-2xl bg-secondary/30 animate-ping" style={{ animationDuration: '2s' }} />
+
+              {/* Icon with rotation animation */}
+              <div className="relative z-10 transition-transform duration-300 group-hover:rotate-90">
+                {isMenuOpen ? <X className="h-9 w-9" /> : <Menu className="h-9 w-9" />}
+              </div>
             </Button>
           </div>
 

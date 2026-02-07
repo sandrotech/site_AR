@@ -25,23 +25,23 @@ export function Header() {
     return (
         <header className="sticky top-0 z-50 bg-primary shadow-2xl transition-all duration-300">
             <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between h-20 md:h-[88px]">
+                <div className="flex items-center justify-between h-16 md:h-[88px]">
 
                     {/* Logo Area - Left */}
                     <Link
                         href="/"
-                        className="flex items-center gap-3 group flex-shrink-0"
+                        className="flex items-center gap-2 md:gap-3 group flex-shrink-0"
                     >
-                        <div className="relative bg-white/10 p-2 rounded-xl backdrop-blur-sm group-hover:bg-white/20 transition-all duration-300">
-                            <ShoppingBasket className="h-8 w-8 md:h-9 md:w-9 text-secondary" />
-                            <Star className="h-4 w-4 md:h-4 md:w-4 text-secondary absolute -top-1 -right-1 fill-secondary animate-pulse" />
+                        <div className="relative bg-white/10 p-1.5 md:p-2 rounded-xl backdrop-blur-sm group-hover:bg-white/20 transition-all duration-300">
+                            <ShoppingBasket className="h-6 w-6 md:h-9 md:w-9 text-secondary" />
+                            <Star className="h-3 w-3 md:h-4 md:w-4 text-secondary absolute -top-1 -right-1 fill-secondary animate-pulse" />
                         </div>
                         <div className="flex flex-col">
                             <div className="flex items-baseline">
-                                <span className="text-secondary font-extrabold text-2xl tracking-tighter leading-none">Ana</span>
-                                <span className="text-white font-extrabold text-2xl tracking-tighter leading-none ml-1">Risorlange</span>
+                                <span className="text-secondary font-extrabold text-lg md:text-2xl tracking-tighter leading-none">Ana</span>
+                                <span className="text-white font-extrabold text-lg md:text-2xl tracking-tighter leading-none ml-1">Risorlange</span>
                             </div>
-                            <span className="text-white/60 text-[10px] font-semibold tracking-[0.3em] uppercase -mt-0.5 ml-0.5">Supermercado</span>
+                            <span className="text-white/60 text-[8px] md:text-[10px] font-semibold tracking-[0.3em] uppercase -mt-0.5 ml-0.5">Supermercado</span>
                         </div>
                     </Link>
 
@@ -109,10 +109,10 @@ export function Header() {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="text-white hover:bg-white/10"
+                            className="h-12 w-12 text-white hover:bg-white/10"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                         >
-                            {isMenuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+                            {isMenuOpen ? <X className="h-9 w-9" /> : <Menu className="h-9 w-9" />}
                         </Button>
                     </div>
 

@@ -81,7 +81,7 @@ export function InstitucionalPage() {
                     <div className="relative h-full w-full">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/40 to-primary z-10" />
                         <Image
-                            src="/placeholders/store-exterior.jpg"
+                            src="/loja/frente_loja.png"
                             alt="Supermercado Ana Risorlange"
                             fill
                             className="object-cover"
@@ -150,7 +150,7 @@ export function InstitucionalPage() {
                             <div className="absolute inset-0 bg-gradient-to-br from-primary to-blue-800 transform group-hover:scale-[0.98] transition-transform duration-500" />
                             <div className="absolute inset-4 border-2 border-secondary/30" />
                             <Image
-                                src="/placeholders/store-history.jpg"
+                                src="/loja/loja_bom jardim.png"
                                 alt="História Ana Risorlange"
                                 fill
                                 className="object-cover p-4 opacity-90"

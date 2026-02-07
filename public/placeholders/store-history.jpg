@@ -1,0 +1,58 @@
+<svg width="1200" height="1600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vintage" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#002a5c;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#003882;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#002a5c;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="grain" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="4" fill="#F8F9FA"/>
+      <circle cx="1" cy="1" r="0.5" fill="#003882" opacity="0.1"/>
+      <circle cx="3" cy="3" r="0.5" fill="#003882" opacity="0.1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="1600" fill="url(#vintage)"/>
+  <rect width="1200" height="1600" fill="url(#grain)" opacity="0.3"/>
+  
+  <!-- Vintage Frame -->
+  <rect x="100" y="100" width="1000" height="1400" fill="none" stroke="#F8F9FA" stroke-width="20"/>
+  <rect x="120" y="120" width="960" height="1360" fill="none" stroke="#FF6600" stroke-width="4"/>
+  
+  <!-- Content -->
+  <text x="600" y="300" font-family="Georgia, serif" font-size="56" font-weight="bold" fill="#E8F1FA" text-anchor="middle">
+    HISTÓRIA
+  </text>
+  <text x="600" y="380" font-family="Georgia, serif" font-size="72" font-weight="bold" fill="#FF6600" text-anchor="middle">
+    1997 - 2026
+  </text>
+  
+  <text x="600" y="550" font-family="Arial, sans-serif" font-size="32" fill="#E8F1FA" text-anchor="middle">
+    Supermercado Ana Risorlange
+  </text>
+  <text x="600" y="620" font-family="Arial, sans-serif" font-size="28" fill="#E8F1FA" text-anchor="middle" opacity="0.7">
+    Bom Jardim, Fortaleza-CE
+  </text>
+  
+  <!-- Timeline Elements -->
+  <line x1="300" y1="800" x2="900" y2="800" stroke="#FF6600" stroke-width="3"/>
+  <circle cx="300" cy="800" r="20" fill="#003882"/>
+  <circle cx="600" cy="800" r="20" fill="#FF6600"/>
+  <circle cx="900" cy="800" r="20" fill="#003882"/>
+  
+  <text x="300" y="870" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#E8F1FA" text-anchor="middle">
+    200m²
+  </text>
+  <text x="600" y="870" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#FF6600" text-anchor="middle">
+    360m²
+  </text>
+  <text x="900" y="870" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#E8F1FA" text-anchor="middle">
+    1.000m²
+  </text>
+  
+  <text x="600" y="1150" font-family="Arial, sans-serif" font-size="28" fill="#E8F1FA" text-anchor="middle" opacity="0.7">
+    Adicione aqui fotos históricas
+  </text>
+  <text x="600" y="1200" font-family="Arial, sans-serif" font-size="28" fill="#E8F1FA" text-anchor="middle" opacity="0.7">
+    da evolução do supermercado
+  </text>
+</svg>

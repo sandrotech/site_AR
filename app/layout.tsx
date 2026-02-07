@@ -1,23 +1,16 @@
+"use client"
+
 import React from "react"
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
+import { Header } from "@/components/header-nav"
+import { Footer } from "@/components/footer"
+import { WhatsAppFAB } from "@/components/whatsapp-fab"
+import { PageTransition } from "@/components/page-transition"
 
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-
-export const metadata: Metadata = {
-  title: 'Ana Risorlange Supermercado | Trazendo o melhor para você',
-  description: 'Supermercado Ana Risorlange - Ofertas incríveis, produtos frescos e atendimento de qualidade em Fortaleza. Visite nossas lojas no Bom Jardim e Bonsucesso.',
-  keywords: 'supermercado, fortaleza, ofertas, promoções, ana risorlange, bom jardim, bonsucesso',
-}
-
-export const viewport: Viewport = {
-  themeColor: '#003882',
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-}
 
 export default function RootLayout({
   children,
@@ -26,7 +19,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.variable} font-sans antialiased`}>{children}</body>
+      <body className={`${inter.variable} font-sans antialiased`}>
+        <div className="min-h-screen bg-background flex flex-col">
+          <Header />
+          <main className="flex-1">
+            <PageTransition>
+              {children}
+            </PageTransition>
+          </main>
+          <Footer />
+          <WhatsAppFAB />
+        </div>
+      </body>
     </html>
   )
 }

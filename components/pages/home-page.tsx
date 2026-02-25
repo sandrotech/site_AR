@@ -73,9 +73,9 @@ export function HomePage() {
                 whileTap={{ scale: 0.95 }}
                 className="group relative flex flex-col items-center bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
               >
-                <div className="relative w-full aspect-[3/4] bg-white overflow-hidden">
+                <div className="relative w-full aspect-3/4 bg-white overflow-hidden">
                   {/* Fallback pattern if image is missing/loading (can be replaced by skeleton later) */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50" />
+                  <div className="absolute inset-0 bg-linear-to-br from-white to-gray-50" />
 
                   <Image
                     src={link.image}
@@ -100,7 +100,7 @@ export function HomePage() {
       {/* App Download Section */}
       <section className="py-12 bg-primary">
         {/* App Download Section */}
-        <section className="py-16 relative overflow-hidden bg-gradient-to-br from-primary via-blue-700 to-blue-900 text-white">
+        <section className="py-16 relative overflow-hidden bg-linear-to-br from-primary via-blue-700 to-blue-900 text-white">
           {/* Decorative background elements */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-2xl transform -translate-x-1/2 translate-y-1/2" />
@@ -128,7 +128,7 @@ export function HomePage() {
                 >
                   <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
                     O supermercado inteiro <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-orange-300">
+                    <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary to-orange-300">
                       na palma da sua mão
                     </span>
                   </h2>
@@ -183,7 +183,7 @@ export function HomePage() {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="relative w-[390px] md:w-[450px] aspect-[9/19.5]"
+                  className="relative w-[390px] md:w-[450px] aspect-9/19.5"
                 >
                   {/* Bloom effect behind phone */}
                   <div className="absolute inset-0 bg-secondary/30 blur-[60px] rounded-full transform scale-90" />
@@ -220,7 +220,7 @@ export function HomePage() {
       <EventsSection />
 
       {/* Tricard Section */}
-      <section className="py-16 relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-red-600">
+      <section className="py-16 relative overflow-hidden bg-linear-to-br from-orange-500 via-orange-600 to-red-600">
         {/* Decorative background elements */}
         <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2" />
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-yellow-400/20 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2" />
@@ -233,7 +233,7 @@ export function HomePage() {
               <div className="absolute inset-0 bg-white/20 blur-[80px] rounded-full transform scale-75" />
 
               <motion.div
-                className="relative w-full max-w-md aspect-[3/4] z-10"
+                className="relative w-full max-w-md aspect-3/4 z-10"
                 animate={{
                   rotate: [0, 5, -5, 5, 0],
                   y: [0, -15, 0]

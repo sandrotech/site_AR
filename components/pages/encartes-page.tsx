@@ -89,13 +89,13 @@ export function EncartesPage() {
                 className="bg-card rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer group"
                 onClick={() => setSelectedFlyer(flyer)}
               >
-                <div className="relative aspect-[3/4] overflow-hidden">
+                <div className="relative aspect-3/4 overflow-hidden">
                   <img
                     src={flyer.image || "/placeholder.svg"}
                     alt={flyer.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <h3 className="text-lg font-bold text-white mb-1">{flyer.title}</h3>
                     <div className="flex items-center gap-2 text-white/80 text-sm">
@@ -141,7 +141,7 @@ export function EncartesPage() {
                   alt={selectedFlyer.title}
                   className="w-full h-auto rounded-lg"
                 />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+                <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 to-transparent p-6 rounded-b-lg">
                   <h2 className="text-2xl font-bold text-white mb-2">{selectedFlyer.title}</h2>
                   <div className="flex items-center gap-2 text-white/80">
                     <Calendar className="h-5 w-5" />

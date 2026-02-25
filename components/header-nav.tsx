@@ -30,7 +30,7 @@ export function Header() {
                     {/* Logo Area - Left */}
                     <Link
                         href="/"
-                        className="flex items-center gap-2 md:gap-3 group flex-shrink-0"
+                        className="flex items-center gap-2 md:gap-3 group shrink-0"
                     >
                         <div className="relative bg-white/10 p-1.5 md:p-2 rounded-xl backdrop-blur-sm group-hover:bg-white/20 transition-all duration-300">
                             <ShoppingBasket className="h-6 w-6 md:h-9 md:w-9 text-secondary" />
@@ -141,7 +141,7 @@ export function Header() {
                             className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-background z-50 shadow-2xl xl:hidden flex flex-col border-l border-border"
                         >
                             {/* Drawer Header - Branded & Personal */}
-                            <div className="relative p-6 pb-8 bg-gradient-to-br from-primary via-blue-700 to-blue-900 border-b border-white/10 overflow-hidden flex flex-col justify-end min-h-[220px]">
+                            <div className="relative p-6 pb-8 bg-linear-to-br from-primary via-blue-700 to-blue-900 border-b border-white/10 overflow-hidden flex flex-col justify-end min-h-[220px]">
 
                                 {/* Close Button - Glassmorphism */}
                                 <div className="absolute top-4 right-4 z-20">
@@ -158,7 +158,7 @@ export function Header() {
                                 {/* Decorative Background Elements */}
                                 <div className="absolute top-[-50%] right-[-20%] w-64 h-64 bg-secondary/20 rounded-full blur-[80px]" />
                                 <div className="absolute bottom-[-20%] left-[-20%] w-40 h-40 bg-blue-400/10 rounded-full blur-[60px]" />
-                                <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+                                <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] bg-size-[16px_16px]" />
 
                                 {/* Content */}
                                 <div className="relative z-10 flex flex-col gap-4">
@@ -184,7 +184,7 @@ export function Header() {
 
                                     {/* Slogan with Separator */}
                                     <div className="pt-4 border-t border-white/10 flex items-center gap-3">
-                                        <div className="h-px flex-1 bg-gradient-to-r from-secondary/50 to-transparent" />
+                                        <div className="h-px flex-1 bg-linear-to-r from-secondary/50 to-transparent" />
                                         <p className="text-blue-100/90 text-xs font-medium italic whitespace-nowrap">
                                             Trazendo o melhor para você!
                                         </p>
@@ -239,7 +239,7 @@ export function Header() {
                                         hidden: { opacity: 0, y: 20 },
                                         visible: { opacity: 1, y: 0 }
                                     }}
-                                    className="mt-6 p-4 rounded-2xl bg-gradient-to-br from-primary to-blue-900 text-white shadow-lg relative overflow-hidden group"
+                                    className="mt-6 p-4 rounded-2xl bg-linear-to-br from-primary to-blue-900 text-white shadow-lg relative overflow-hidden group"
                                 >
                                     <div className="relative z-10 flex flex-col items-start">
                                         <span className="bg-secondary text-xs font-bold px-2 py-0.5 rounded text-white mb-2">NOVIDADE</span>

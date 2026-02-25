@@ -77,15 +77,15 @@ export function Footer() {
           <FooterSection title="Loja Bom Jardim">
             <div className="space-y-3 text-sm text-primary-foreground/80">
               <div className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 mt-1 flex-shrink-0 text-secondary" />
+                <MapPin className="h-4 w-4 mt-1 shrink-0 text-secondary" />
                 <span>R. Maria Júlia, 980 - Bom Jardim, Fortaleza - CE, 60540-250</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 flex-shrink-0 text-secondary" />
+                <Phone className="h-4 w-4 shrink-0 text-secondary" />
                 <span>(85) 9 9996.0267</span>
               </div>
               <div className="flex items-start gap-2">
-                <Clock className="h-4 w-4 mt-1 flex-shrink-0 text-secondary" />
+                <Clock className="h-4 w-4 mt-1 shrink-0 text-secondary" />
                 <span>Seg - Sáb: 7h às 21h<br />Dom: 7h às 13h</span>
               </div>
             </div>
@@ -95,15 +95,15 @@ export function Footer() {
           <FooterSection title="Loja Bonsucesso">
             <div className="space-y-3 text-sm text-primary-foreground/80">
               <div className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 mt-1 flex-shrink-0 text-secondary" />
+                <MapPin className="h-4 w-4 mt-1 shrink-0 text-secondary" />
                 <span>R. Verbena, 630 - Bonsucesso, Fortaleza - CE, 60545-350</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 flex-shrink-0 text-secondary" />
+                <Phone className="h-4 w-4 shrink-0 text-secondary" />
                 <span>(85) 9 9660.2873</span>
               </div>
               <div className="flex items-start gap-2">
-                <Clock className="h-4 w-4 mt-1 flex-shrink-0 text-secondary" />
+                <Clock className="h-4 w-4 mt-1 shrink-0 text-secondary" />
                 <span>Seg - Sáb: 7h às 21h<br />Dom: 7h às 13h</span>
               </div>
             </div>

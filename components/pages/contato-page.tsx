@@ -54,8 +54,8 @@ export function ContatoPage() {
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section - Responsive Typography */}
-            <section className="relative py-12 sm:py-16 md:py-20 lg:py-28 overflow-hidden bg-gradient-to-br from-primary via-blue-700 to-blue-900">
-                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:32px_32px]" />
+            <section className="relative py-12 sm:py-16 md:py-20 lg:py-28 overflow-hidden bg-linear-to-br from-primary via-blue-700 to-blue-900">
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] bg-size-[32px_32px]" />
                 <div className="absolute top-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-secondary/20 rounded-full blur-[80px] sm:blur-[120px]" />
                 <div className="absolute bottom-0 left-0 w-56 h-56 sm:w-80 sm:h-80 bg-white/10 rounded-full blur-[70px] sm:blur-[100px]" />
 
@@ -78,7 +78,7 @@ export function ContatoPage() {
 
                         {/* Responsive Typography using clamp */}
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-4 sm:mb-6 leading-tight px-2">
-                            Estamos aqui para <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-orange-300 block sm:inline">ajudar você!</span>
+                            Estamos aqui para <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary to-orange-300 block sm:inline">ajudar você!</span>
                         </h1>
                         <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 font-medium px-4">
                             Entre em contato conosco. Sua opinião é muito importante!
@@ -100,10 +100,10 @@ export function ContatoPage() {
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
                                 whileHover={{ y: -8, scale: 1.02 }}
-                                className="group p-6 sm:p-7 md:p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 hover:border-primary hover:shadow-2xl transition-all duration-300 min-h-[200px] sm:min-h-[220px] lg:min-h-[240px] flex flex-col"
+                                className="group p-6 sm:p-7 md:p-8 rounded-2xl bg-linear-to-br from-gray-50 to-white border-2 border-gray-100 hover:border-primary hover:shadow-2xl transition-all duration-300 min-h-[200px] sm:min-h-[220px] lg:min-h-[240px] flex flex-col"
                             >
                                 {/* Von Restorff Effect: Icon stands out */}
-                                <div className="bg-gradient-to-br from-primary to-blue-700 p-3 sm:p-4 rounded-xl w-fit mb-4 sm:mb-5 group-hover:scale-110 transition-transform">
+                                <div className="bg-linear-to-br from-primary to-blue-700 p-3 sm:p-4 rounded-xl w-fit mb-4 sm:mb-5 group-hover:scale-110 transition-transform">
                                     <item.icon className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                                 </div>
 
@@ -118,7 +118,7 @@ export function ContatoPage() {
                                             href={item.link}
                                             className={`text-sm sm:text-base lg:text-lg font-bold text-gray-900 group-hover:text-primary transition-colors leading-snug ${item.title === "E-mail"
                                                     ? "break-all max-w-full"
-                                                    : "break-words hyphens-auto"
+                                                    : "wrap-break-word hyphens-auto"
                                                 }`}
                                         >
                                             {item.content}
@@ -126,7 +126,7 @@ export function ContatoPage() {
                                     ) : (
                                         <p className={`text-sm sm:text-base lg:text-lg font-bold text-gray-900 leading-snug ${item.title === "E-mail"
                                                 ? "break-all max-w-full"
-                                                : "break-words hyphens-auto"
+                                                : "wrap-break-word hyphens-auto"
                                             }`}>{item.content}</p>
                                     )}
                                 </div>
@@ -137,7 +137,7 @@ export function ContatoPage() {
             </section>
 
             {/* Contact Form + Social - Stacked on Mobile */}
-            <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-gray-50">
+            <section className="py-12 sm:py-16 lg:py-20 bg-linear-to-b from-white to-gray-50">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12">
 
@@ -244,7 +244,7 @@ export function ContatoPage() {
                             className="space-y-6 sm:space-y-8 order-1 lg:order-2"
                         >
                             {/* Social Media */}
-                            <div className="bg-gradient-to-br from-primary to-blue-900 p-6 sm:p-8 md:p-10 rounded-3xl shadow-xl text-white relative overflow-hidden">
+                            <div className="bg-linear-to-br from-primary to-blue-900 p-6 sm:p-8 md:p-10 rounded-3xl shadow-xl text-white relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 bg-secondary/20 rounded-full blur-[60px] sm:blur-[80px]" />
                                 <div className="relative z-10">
                                     <h3 className="text-xl sm:text-2xl md:text-3xl font-black mb-3 sm:mb-4">
@@ -282,7 +282,7 @@ export function ContatoPage() {
                             {/* WhatsApp CTA */}
                             <motion.div
                                 whileHover={{ scale: 1.02 }}
-                                className="bg-gradient-to-br from-green-500 to-green-700 p-6 sm:p-8 rounded-3xl shadow-xl text-white cursor-pointer relative overflow-hidden group"
+                                className="bg-linear-to-br from-green-500 to-green-700 p-6 sm:p-8 rounded-3xl shadow-xl text-white cursor-pointer relative overflow-hidden group"
                             >
                                 <div className="absolute top-0 right-0 w-32 h-32 sm:w-40 sm:h-40 bg-white/10 rounded-full blur-[50px] sm:blur-[60px]" />
                                 <div className="relative z-10">

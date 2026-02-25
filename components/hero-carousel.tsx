@@ -98,7 +98,7 @@ export function HeroCarousel() {
                                     />
                                     {/* Gradient Overlay for Text Readability */}
                                     <div className={cn(
-                                        "absolute inset-0 bg-gradient-to-r via-black/40 to-transparent opacity-90",
+                                        "absolute inset-0 bg-linear-to-r via-black/40 to-transparent opacity-90",
                                         banner.color
                                     )} />
                                 </div>

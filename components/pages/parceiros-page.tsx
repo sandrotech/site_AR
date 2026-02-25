@@ -61,7 +61,7 @@ export function ParceirosPage() {
                 </Button>
               </div>
             </div>
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="bg-primary/10 rounded-full p-8">
                 <Building2 className="h-24 w-24 text-primary" />
               </div>
@@ -90,7 +90,7 @@ export function ParceirosPage() {
                     alt={partner.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <span className="text-xs font-medium text-white/80 bg-white/20 px-2 py-1 rounded-full">
                       {partner.category}

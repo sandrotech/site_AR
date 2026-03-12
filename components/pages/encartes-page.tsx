@@ -56,14 +56,14 @@ const categories = [
 ]
 
 const flyersData = [
-    { id: 1, category: "hortifruti", title: "Hortifruti em Oferta", image: "/images/banner-sorteio.jpg", pdf: "/encartes/hortifruti.pdf", validUntil: "Terça-feira", featured: true },
-    { id: 2, category: "hortifruti", title: "Frutas da Estação", image: "/images/banner-app.jpg", pdf: "/encartes/frutas.pdf", validUntil: "Terça-feira" },
-    { id: 3, category: "acougue", title: "Carnes Selecionadas", image: "/images/banner-tricard.jpg", pdf: "/encartes/acougue.pdf", validUntil: "Quinta-feira" },
-    { id: 4, category: "acougue", title: "Churrasco Completo", image: "/images/banner-sorteio.jpg", pdf: "/encartes/churrasco.pdf", validUntil: "Quinta-feira" },
-    { id: 5, category: "fimdesemana", title: "Super Fim de Semana", image: "/images/banner-app.jpg", pdf: "/encartes/fds.pdf", validUntil: "Domingo" },
-    { id: 6, category: "fimdesemana", title: "Ofertas Especiais", image: "/images/banner-tricard.jpg", pdf: "/encartes/especial.pdf", validUntil: "Domingo" },
-    { id: 7, category: "mensal", title: "Encarte Mensal", image: "/images/banner-sorteio.jpg", pdf: "/encartes/mensal.pdf", validUntil: "28/02/2026" },
-    { id: 8, category: "mensal", title: "Promoções do Mês", image: "/images/banner-app.jpg", pdf: "/encartes/promocoes.pdf", validUntil: "28/02/2026" },
+    { id: 1, category: "hortifruti", title: "Hortifruti em Oferta", image: "/encartes/WhatsApp Image 2026-03-11 at 14.44.31.jpeg", pdf: "/encartes/WhatsApp Image 2026-03-11 at 14.44.31.jpeg", validUntil: "Terça-feira", featured: true },
+    { id: 2, category: "hortifruti", title: "Frutas da Estação", image: "/encartes/WhatsApp Image 2026-03-11 at 20.46.03.jpeg", pdf: "/encartes/WhatsApp Image 2026-03-11 at 20.46.03.jpeg", validUntil: "Terça-feira" },
+    { id: 3, category: "acougue", title: "Carnes Selecionadas", image: "/encartes/WhatsApp Image 2026-03-11 at 20.46.04.jpeg", pdf: "/encartes/WhatsApp Image 2026-03-11 at 20.46.04.jpeg", validUntil: "Quinta-feira" },
+    { id: 4, category: "acougue", title: "Churrasco Completo", image: "/encartes/WhatsApp Image 2026-03-11 at 20.46.05.jpeg", pdf: "/encartes/WhatsApp Image 2026-03-11 at 20.46.05.jpeg", validUntil: "Quinta-feira" },
+    { id: 5, category: "fimdesemana", title: "Super Fim de Semana", image: "/encartes/WhatsApp Image 2026-03-11 at 20.46.03 (1).jpeg", pdf: "/encartes/WhatsApp Image 2026-03-11 at 20.46.03 (1).jpeg", validUntil: "Domingo" },
+    { id: 6, category: "fimdesemana", title: "Ofertas Especiais", image: "/encartes/WhatsApp Image 2026-03-11 at 20.46.04 (1).jpeg", pdf: "/encartes/WhatsApp Image 2026-03-11 at 20.46.04 (1).jpeg", validUntil: "Domingo" },
+    { id: 7, category: "mensal", title: "Encarte Mensal", image: "/encartes/WhatsApp Image 2026-03-11 at 20.46.05 (1).jpeg", pdf: "/encartes/WhatsApp Image 2026-03-11 at 20.46.05 (1).jpeg", validUntil: "28/02/2026" },
+    { id: 8, category: "mensal", title: "Promoções do Mês", image: "/encartes/WhatsApp Image 2026-03-11 at 20.46.06.jpeg", pdf: "/encartes/WhatsApp Image 2026-03-11 at 20.46.06.jpeg", validUntil: "28/02/2026" },
 ]
 
 // ===== Tilt Card Component =====
@@ -155,6 +155,12 @@ export function EncartesPage() {
 
     useEffect(() => {
         if (!viewerOpen || !selectedFlyer?.pdf) return;
+        if (!selectedFlyer.pdf.toLowerCase().endsWith(".pdf")) {
+            setNumPages(1);
+            setPage(1);
+            setIsLoading(false);
+            return;
+        }
 
         let cancelled = false;
         setIsLoading(true);
@@ -164,7 +170,9 @@ export function EncartesPage() {
                 const pdfjsLib = await ensurePdfJs();
                 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-                const task = pdfjsLib.getDocument(selectedFlyer.pdf);
+                const res = await fetch(selectedFlyer.pdf);
+                const buffer = await res.arrayBuffer();
+                const task = pdfjsLib.getDocument({ data: buffer });
                 const doc = await task.promise;
 
                 if (cancelled) return;
@@ -440,12 +448,20 @@ export function EncartesPage() {
                                         contentClass="!w-full !h-full flex items-center justify-center p-4 md:p-10"
                                     >
                                         <motion.div
-                                            key={page}
+                                            key={selectedFlyer?.id + "-" + page}
                                             initial={{ opacity: 0, scale: 0.98 }}
                                             animate={{ opacity: 1, scale: 1 }}
                                             className="relative shadow-2xl rounded-sm overflow-hidden"
                                         >
-                                            <canvas ref={canvasRef} className="max-w-full max-h-[75vh] block" />
+                                            {selectedFlyer?.pdf.toLowerCase().endsWith(".pdf") ? (
+                                                <canvas ref={canvasRef} className="max-w-full max-h-[75vh] block" />
+                                            ) : (
+                                                <img 
+                                                    src={selectedFlyer?.pdf} 
+                                                    alt={selectedFlyer?.title} 
+                                                    className="max-w-full max-h-[75vh] object-contain block" 
+                                                />
+                                            )}
                                         </motion.div>
                                     </TransformComponent>
                                 </TransformWrapper>

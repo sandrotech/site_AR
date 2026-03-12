@@ -79,8 +79,9 @@ export function HeroCarousel() {
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
-            {/* Full Viewport Height Minus Header (88px) */}
-            <div className="relative group h-[calc(100vh-88px)] w-full">
+            {/* Banner Container */}
+            {/* Full viewport height to ensure the banner is the sole focus initially, starting behind the header */}
+            <div className="relative group w-full h-[100vh] min-h-[600px]">
                 {/* Embla Viewport */}
                 <div className="overflow-hidden h-full w-full" ref={emblaRef}>
                     <div className="flex h-full w-full touch-pan-y">
@@ -156,43 +157,49 @@ export function HeroCarousel() {
                     </div>
                 </div>
 
-                {/* Ultra-Minimal Navigation Arrows - Chevron Only (Cometa Style) */}
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-between px-4 md:px-8">
-                    {/* Previous Arrow */}
-                    <button
-                        onClick={scrollPrev}
-                        className="pointer-events-auto opacity-0 group-hover:opacity-100 transition-all duration-500 text-white hover:scale-125 active:scale-95 p-2"
-                        aria-label="Anterior"
-                    >
-                        <ChevronLeft className="h-12 w-12 md:h-16 md:w-16" strokeWidth={1.5} />
-                    </button>
-
-                    {/* Next Arrow */}
-                    <button
-                        onClick={scrollNext}
-                        className="pointer-events-auto opacity-0 group-hover:opacity-100 transition-all duration-500 text-white hover:scale-125 active:scale-95 p-2"
-                        aria-label="Próximo"
-                    >
-                        <ChevronRight className="h-12 w-12 md:h-16 md:w-16" strokeWidth={1.5} />
-                    </button>
-                </div>
-
-                {/* Pagination Dots - Larger for Full Screen */}
-                <div className="absolute bottom-12 left-0 right-0 flex justify-center gap-4 pointer-events-none">
-                    {BANNERS.map((_, index) => (
+                {/* Buttons Controls */}
+                {BANNERS.length > 1 && (
+                    <>
                         <button
-                            key={index}
-                            onClick={() => scrollTo(index)}
-                            className={cn(
-                                "pointer-events-auto w-4 h-4 rounded-full transition-all duration-300 shadow-lg",
-                                selectedIndex === index
-                                    ? "bg-secondary scale-125 w-12"
-                                    : "bg-white/40 hover:bg-white/70 hover:scale-110"
-                            )}
-                            aria-label={`Ir para slide ${index + 1}`}
-                        />
-                    ))}
-                </div>
+                            onClick={scrollPrev}
+                            className="absolute top-1/2 -translate-y-1/2 left-2 md:left-10 z-20 text-white/70 hover:text-white transition-colors text-4xl md:text-8xl drop-shadow-lg"
+                            aria-label="Anterior"
+                        >
+                            <ChevronLeft className="w-[1em] h-[1em]" />
+                        </button>
+                        <button
+                            onClick={scrollNext}
+                            className="absolute top-1/2 -translate-y-1/2 right-2 md:right-10 z-20 text-white/70 hover:text-white transition-colors text-4xl md:text-8xl drop-shadow-lg"
+                            aria-label="Próximo"
+                        >
+                            <ChevronRight className="w-[1em] h-[1em]" />
+                        </button>
+                    </>
+                )}
+                {/* Bullets/Dots Navigation - Inside banner over image */}
+                {BANNERS.length > 1 && (
+                    <div className="absolute bottom-6 left-0 right-0 flex justify-center items-center gap-4 z-30">
+                        {BANNERS.map((_, index) => (
+                            <motion.button
+                                key={index}
+                                onClick={() => scrollTo(index)}
+                                whileHover={{ scale: 1.2 }}
+                                whileTap={{ scale: 0.95 }}
+                                animate={{
+                                    scale: selectedIndex === index ? 1.3 : 1,
+                                    backgroundColor:
+                                        selectedIndex === index
+                                            ? "var(--color-secondary)" // Active: Ana Risorlange Secondary/Orange
+                                            : "rgba(255, 255, 255, 0.4)", // Inactive: Transparent White
+                                    boxShadow: selectedIndex === index ? "0px 0px 8px rgba(255, 102, 0, 0.5)" : "none",
+                                }}
+                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                className="w-3 h-3 md:w-4 md:h-4 rounded-full transition-colors duration-300 cursor-pointer"
+                                aria-label={`Ir para slide ${index + 1}`}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     )

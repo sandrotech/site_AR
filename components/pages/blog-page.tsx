@@ -61,9 +61,9 @@ export function BlogPage() {
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <section className="relative py-20 md:py-28 overflow-hidden bg-gradient-to-br from-primary via-blue-700 to-blue-900">
+            <section className="relative py-20 md:py-28 overflow-hidden bg-linear-to-br from-primary via-blue-700 to-blue-900">
                 {/* Decorative background */}
-                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:32px_32px]" />
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] bg-size-[32px_32px]" />
                 <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[140px]" />
                 <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-[100px]" />
 
@@ -85,7 +85,7 @@ export function BlogPage() {
                         </motion.div>
 
                         <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
-                            Fique por dentro das <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-orange-300">novidades</span>
+                            Fique por dentro das <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary to-orange-300">novidades</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-blue-100 font-medium">
                             Eventos, campanhas, dicas e muito mais para você aproveitar ao máximo!
@@ -119,7 +119,7 @@ export function BlogPage() {
             </section>
 
             {/* Featured Posts */}
-            <section className="py-16 bg-gradient-to-b from-white to-gray-50">
+            <section className="py-16 bg-linear-to-b from-white to-gray-50">
                 <div className="container mx-auto px-4 max-w-7xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -147,7 +147,7 @@ export function BlogPage() {
                             >
                                 <Link href={`/blog/${post.slug}`}>
                                     <div className="relative h-72 overflow-hidden">
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10" />
+                                        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent z-10" />
                                         <Image
                                             src={post.image}
                                             alt={post.title}
@@ -253,7 +253,7 @@ export function BlogPage() {
             </section>
 
             {/* Newsletter CTA */}
-            <section className="py-20 bg-gradient-to-br from-primary to-blue-900 text-white relative overflow-hidden">
+            <section className="py-20 bg-linear-to-br from-primary to-blue-900 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/30 rounded-full blur-[120px]" />
                 <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full blur-[100px]" />
 

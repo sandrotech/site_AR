@@ -32,7 +32,7 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
 
           {/* Logo Area - Left */}
           <div
-            className="cursor-pointer group flex-shrink-0"
+            className="cursor-pointer group shrink-0"
             onClick={() => setCurrentPage("home")}
           >
             <Image
@@ -110,11 +110,11 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="relative h-14 w-14 rounded-2xl bg-gradient-to-br from-secondary via-orange-600 to-red-600 text-white shadow-[0_8px_24px_rgba(255,102,0,0.4)] hover:shadow-[0_12px_32px_rgba(255,102,0,0.6)] border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 active:scale-95 group overflow-hidden"
+              className="relative h-14 w-14 rounded-2xl bg-linear-to-br from-secondary via-orange-600 to-red-600 text-white shadow-[0_8px_24px_rgba(255,102,0,0.4)] hover:shadow-[0_12px_32px_rgba(255,102,0,0.6)] border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 active:scale-95 group overflow-hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {/* Animated glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-linear-to-tr from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               {/* Pulse ring animation */}
               <div className="absolute inset-0 rounded-2xl bg-secondary/30 animate-ping" style={{ animationDuration: '2s' }} />
@@ -151,7 +151,7 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
               className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-background z-50 shadow-2xl xl:hidden flex flex-col border-l border-border"
             >
               {/* Drawer Header - Branded & Personal (Redesigned) */}
-              <div className="relative p-6 pb-8 bg-gradient-to-br from-primary via-blue-700 to-blue-900 border-b border-white/10 overflow-hidden flex flex-col justify-end min-h-[220px]">
+              <div className="relative p-6 pb-8 bg-linear-to-br from-primary via-blue-700 to-blue-900 border-b border-white/10 overflow-hidden flex flex-col justify-end min-h-[220px]">
 
                 {/* Close Button - Glassmorphism */}
                 <div className="absolute top-4 right-4 z-20">
@@ -168,7 +168,7 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
                 {/* Decorative Background Elements */}
                 <div className="absolute top-[-50%] right-[-20%] w-64 h-64 bg-secondary/20 rounded-full blur-[80px]" />
                 <div className="absolute bottom-[-20%] left-[-20%] w-40 h-40 bg-blue-400/10 rounded-full blur-[60px]" />
-                <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+                <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] bg-size-[16px_16px]" />
 
                 {/* Content */}
                 <div className="relative z-10 flex flex-col gap-4">
@@ -194,7 +194,7 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
 
                   {/* Slogan with Separator */}
                   <div className="pt-4 border-t border-white/10 flex items-center gap-3">
-                    <div className="h-px flex-1 bg-gradient-to-r from-secondary/50 to-transparent" />
+                    <div className="h-px flex-1 bg-linear-to-r from-secondary/50 to-transparent" />
                     <p className="text-blue-100/90 text-xs font-medium italic whitespace-nowrap">
                       Trazendo o melhor para você!
                     </p>
@@ -255,7 +255,7 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
                     hidden: { opacity: 0, y: 20 },
                     visible: { opacity: 1, y: 0 }
                   }}
-                  className="mt-6 p-4 rounded-2xl bg-gradient-to-br from-primary to-blue-900 text-white shadow-lg relative overflow-hidden group"
+                  className="mt-6 p-4 rounded-2xl bg-linear-to-br from-primary to-blue-900 text-white shadow-lg relative overflow-hidden group"
                 >
                   <div className="relative z-10 flex flex-col items-start">
                     <span className="bg-secondary text-xs font-bold px-2 py-0.5 rounded text-white mb-2">NOVIDADE</span>

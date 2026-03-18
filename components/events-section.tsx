@@ -53,7 +53,7 @@ const events = [
 
 export function EventsSection() {
     return (
-        <section className="py-16 bg-gradient-to-b from-background via-gray-50 to-background relative overflow-hidden">
+        <section className="py-16 bg-linear-to-b from-background via-gray-50 to-background relative overflow-hidden">
             {/* Background Decorative Elements */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                 <div className="absolute top-10 left-10 w-64 h-64 bg-secondary/5 rounded-full blur-3xl" />
@@ -104,7 +104,7 @@ export function EventsSection() {
                             whileHover={{ y: -10 }}
                             className={`group relative bg-white rounded-3xl p-1 overflow-hidden shadow-lg transition-all duration-300 ${event.shadow}`}
                         >
-                            <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
+                            <div className="absolute inset-0 bg-linear-to-br opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
 
                             <div className="relative h-full bg-white rounded-[20px] p-6 md:p-8 flex flex-col border border-gray-100">
 
@@ -118,8 +118,8 @@ export function EventsSection() {
 
                                 {/* Content */}
                                 <div className="flex-1">
-                                    <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r hover:bg-gradient-to-l transition-all duration-500 mb-2 cursor-pointer
-                    bg-gradient-to-r from-gray-900 to-gray-600 group-hover:from-gray-900 group-hover:to-primary">
+                                    <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r hover:bg-linear-to-l transition-all duration-500 mb-2 cursor-pointer
+                    bg-linear-to-r from-gray-900 to-gray-600 group-hover:from-gray-900 group-hover:to-primary">
                                         {event.title}
                                     </h3>
                                     <p className="text-secondary font-medium text-sm mb-4 uppercase tracking-wider">
@@ -137,7 +137,7 @@ export function EventsSection() {
                                         className="w-full justify-between hover:bg-gray-50 group/btn"
                                     >
                                         <span className="font-semibold text-foreground group-hover/btn:text-primary transition-colors">Saiba mais</span>
-                                        <div className={`p-1.5 rounded-full text-white bg-gradient-to-r ${event.color} group-hover/btn:scale-110 transition-transform`}>
+                                        <div className={`p-1.5 rounded-full text-white bg-linear-to-r ${event.color} group-hover/btn:scale-110 transition-transform`}>
                                             <ArrowRight className="h-4 w-4" />
                                         </div>
                                     </Button>

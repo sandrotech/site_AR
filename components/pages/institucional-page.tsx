@@ -65,10 +65,10 @@ export function InstitucionalPage() {
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section - Asymmetric Layout */}
-            <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-to-br from-primary via-blue-800 to-blue-950">
+            <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-linear-to-br from-primary via-blue-800 to-blue-950">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-5">
-                    <div className="absolute inset-0 bg-[linear-gradient(30deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff),linear-gradient(150deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff),linear-gradient(30deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff),linear-gradient(150deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff)] bg-[length:80px_140px] bg-[position:0_0,0_0,40px_70px,40px_70px]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(30deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff),linear-gradient(150deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff),linear-gradient(30deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff),linear-gradient(150deg,#fff_12%,transparent_12.5%,transparent_87%,#fff_87.5%,#fff)] bg-size-[80px_140px] bg-position-[0_0,0_0,40px_70px,40px_70px]" />
                 </div>
 
                 {/* Image Overlay - Left 40% */}
@@ -79,7 +79,7 @@ export function InstitucionalPage() {
                     className="absolute left-0 top-0 bottom-0 w-[40%] hidden lg:block"
                 >
                     <div className="relative h-full w-full">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/40 to-primary z-10" />
+                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-primary/40 to-primary z-10" />
                         <Image
                             src="/loja/frente_loja.png"
                             alt="Supermercado Ana Risorlange"
@@ -147,7 +147,7 @@ export function InstitucionalPage() {
                             transition={{ duration: 0.8 }}
                             className="relative h-[600px] group"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary to-blue-800 transform group-hover:scale-[0.98] transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-linear-to-br from-primary to-blue-800 transform group-hover:scale-[0.98] transition-transform duration-500" />
                             <div className="absolute inset-4 border-2 border-secondary/30" />
                             <Image
                                 src="/loja/loja_bom jardim.png"
@@ -273,7 +273,7 @@ export function InstitucionalPage() {
                             viewport={{ once: true }}
                             className="relative group"
                         >
-                            <div className="absolute -inset-4 bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="absolute -inset-4 bg-linear-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             <div className="relative bg-muted p-12 border-l-4 border-secondary">
                                 <div className="inline-flex items-center gap-2 bg-white px-4 py-2 mb-6">
                                     <Target className="h-5 w-5 text-secondary" />
@@ -296,7 +296,7 @@ export function InstitucionalPage() {
                             transition={{ delay: 0.2 }}
                             className="relative group"
                         >
-                            <div className="absolute -inset-4 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="absolute -inset-4 bg-linear-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             <div className="relative bg-muted p-12 border-l-4 border-primary">
                                 <div className="inline-flex items-center gap-2 bg-white px-4 py-2 mb-6">
                                     <Eye className="h-5 w-5 text-primary" />
@@ -315,7 +315,7 @@ export function InstitucionalPage() {
             </section>
 
             {/* Values */}
-            <section className="py-24 bg-gradient-to-b from-muted to-white">
+            <section className="py-24 bg-linear-to-b from-muted to-white">
                 <div className="container mx-auto px-4 max-w-7xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -347,7 +347,7 @@ export function InstitucionalPage() {
                                 className="bg-white p-8 relative group overflow-hidden border-2 border-transparent hover:border-secondary transition-all duration-300"
                             >
                                 {/* Hover Background */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                                 {/* Icon */}
                                 <div className="relative bg-primary p-4 w-fit mb-6 group-hover:bg-secondary transition-colors duration-300">
@@ -393,7 +393,7 @@ export function InstitucionalPage() {
 
                     <div className="relative">
                         {/* Vertical Line */}
-                        <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-primary" />
+                        <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-linear-to-b from-primary via-secondary to-primary" />
 
                         <div className="space-y-16">
                             {milestones.map((milestone, index) => (
@@ -423,7 +423,7 @@ export function InstitucionalPage() {
                                     </div>
 
                                     {/* Center Point */}
-                                    <div className="relative flex-shrink-0 hidden md:block">
+                                    <div className="relative shrink-0 hidden md:block">
                                         <div className="w-6 h-6 bg-secondary border-4 border-white shadow-lg rounded-full" />
                                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-secondary/20 rounded-full animate-ping" />
                                     </div>
@@ -438,7 +438,7 @@ export function InstitucionalPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-24 bg-gradient-to-br from-primary via-blue-800 to-blue-950 text-white relative overflow-hidden">
+            <section className="py-24 bg-linear-to-br from-primary via-blue-800 to-blue-950 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-secondary/20 rounded-full blur-[180px]" />
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-primary/30 rounded-full blur-[180px]" />
 

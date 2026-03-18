@@ -93,7 +93,7 @@ export function BlogPostPage({ slug }: BlogPostPageProps) {
 
             {/* Hero Image */}
             <section className="relative h-[60vh] min-h-[400px] overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent z-10" />
                 <Image
                     src={post.image}
                     alt={post.title}

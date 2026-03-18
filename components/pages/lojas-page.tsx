@@ -260,7 +260,7 @@ export function LojasPage() {
                 >
                   {/* Store Image */}
                   <div className="flex gap-4">
-                    <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden group">
+                    <div className="relative w-20 h-20 shrink-0 rounded-lg overflow-hidden group">
                       <img
                         src={store.image}
                         alt={store.name}
@@ -338,17 +338,17 @@ export function LojasPage() {
                       <h3 className="font-bold text-primary mb-2">{store.name}</h3>
                       <div className="space-y-2 text-sm">
                         <div className="flex items-start gap-2">
-                          <MapPin className="h-4 w-4 text-gray-500 flex-shrink-0 mt-0.5" />
+                          <MapPin className="h-4 w-4 text-gray-500 shrink-0 mt-0.5" />
                           <span className="text-gray-700">{store.address}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Phone className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                          <Phone className="h-4 w-4 text-gray-500 shrink-0" />
                           <a href={`tel:${store.phone.replace(/\D/g, '')}`} className="text-primary hover:underline">
                             {store.phone}
                           </a>
                         </div>
                         <div className="flex items-start gap-2">
-                          <Clock className="h-4 w-4 text-gray-500 flex-shrink-0 mt-0.5" />
+                          <Clock className="h-4 w-4 text-gray-500 shrink-0 mt-0.5" />
                           <span className="text-gray-700">{store.hours}</span>
                         </div>
                       </div>
@@ -368,7 +368,7 @@ export function LojasPage() {
           )}
 
           {/* Floating Location Button - Mobile */}
-          <div className="lg:hidden absolute bottom-6 right-6 z-[1000]">
+          <div className="lg:hidden absolute bottom-6 right-6 z-1000">
             <Button
               onClick={requestLocation}
               disabled={locationStatus === 'loading'}
@@ -427,7 +427,7 @@ export function LojasPage() {
                     alt={selectedStore.name}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
 
                   {/* Store Name */}
                   <div className="absolute bottom-4 left-6 right-6">
@@ -456,7 +456,7 @@ export function LojasPage() {
                   {/* Contact Cards */}
                   <div className="space-y-3">
                     <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                      <MapPin className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                      <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                       <div className="flex-1 min-w-0">
                         <h4 className="font-bold text-gray-900 text-sm mb-0.5">Endereço</h4>
                         <p className="text-gray-700 text-sm">{selectedStore.address}</p>
@@ -464,7 +464,7 @@ export function LojasPage() {
                     </div>
 
                     <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                      <Phone className="h-5 w-5 text-primary flex-shrink-0" />
+                      <Phone className="h-5 w-5 text-primary shrink-0" />
                       <div className="flex-1">
                         <h4 className="font-bold text-gray-900 text-sm mb-0.5">Telefone</h4>
                         <a
@@ -477,7 +477,7 @@ export function LojasPage() {
                     </div>
 
                     <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                      <Clock className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                      <Clock className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                       <div className="flex-1">
                         <h4 className="font-bold text-gray-900 text-sm mb-0.5">Horário</h4>
                         <p className="text-gray-700 text-sm">{selectedStore.hours}</p>
@@ -542,7 +542,7 @@ export function LojasPage() {
                   alt={selectedStore.name}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
 
                 {/* Close Button */}
                 <button
@@ -579,7 +579,7 @@ export function LojasPage() {
                 {/* Contact Info */}
                 <div className="space-y-4">
                   <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
-                    <MapPin className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
+                    <MapPin className="h-6 w-6 text-primary shrink-0 mt-0.5" />
                     <div className="flex-1">
                       <h4 className="font-bold text-gray-900 mb-1">Endereço</h4>
                       <p className="text-gray-700">{selectedStore.address}</p>
@@ -587,7 +587,7 @@ export function LojasPage() {
                   </div>
 
                   <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                    <Phone className="h-6 w-6 text-primary flex-shrink-0" />
+                    <Phone className="h-6 w-6 text-primary shrink-0" />
                     <div className="flex-1">
                       <h4 className="font-bold text-gray-900 mb-1">Telefone</h4>
                       <a
@@ -600,7 +600,7 @@ export function LojasPage() {
                   </div>
 
                   <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
-                    <Clock className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
+                    <Clock className="h-6 w-6 text-primary shrink-0 mt-0.5" />
                     <div className="flex-1">
                       <h4 className="font-bold text-gray-900 mb-1">Horário de Funcionamento</h4>
                       <p className="text-gray-700">{selectedStore.hours}</p>

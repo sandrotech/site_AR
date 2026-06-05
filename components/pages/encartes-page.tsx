@@ -32,7 +32,7 @@ const flyers: Record<string, Flyer[]> = {
 // ─── Minimal Zoom Viewer ───────────────────────────────────────────────────────
 // Mouse wheel zoom (desktop) + pinch-to-zoom (mobile) + drag when zoomed
 
-function ZoomImage({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+function ZoomImage({ src, alt, onClose, leftNode, rightNode }: { src: string; alt: string; onClose: () => void; leftNode?: React.ReactNode; rightNode?: React.ReactNode }) {
   const [scale, setScale] = useState(1)
   const [pos, setPos] = useState({ x: 0, y: 0 })
   const scaleRef = useRef(1)
@@ -123,6 +123,7 @@ function ZoomImage({ src, alt, onClose }: { src: string; alt: string; onClose: (
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        gap: "24px",
         background: "transparent",
         overflow: "hidden",
         cursor: scale > 1 ? (dragging.current ? "grabbing" : "grab") : "default",
@@ -143,13 +144,14 @@ function ZoomImage({ src, alt, onClose }: { src: string; alt: string; onClose: (
         }
       }}
     >
+      {leftNode}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
         alt={alt}
         draggable={false}
         style={{
-          maxWidth: "90%",
+          maxWidth: "calc(100% - 200px)", // Leaves room for 64px buttons + gaps
           maxHeight: "90vh", // Using 90vh to ensure it respects viewport height precisely
           objectFit: "contain",
           display: "block",
@@ -157,8 +159,10 @@ function ZoomImage({ src, alt, onClose }: { src: string; alt: string; onClose: (
           transition: dragging.current ? "none" : "transform 0.12s ease-out",
           transformOrigin: "center center",
           pointerEvents: "none",
+          zIndex: 1,
         }}
       />
+      {rightNode}
     </div>
   )
 }
@@ -410,77 +414,67 @@ function ViewerPortal({
             justifyContent: "center",
           }}
         >
-          {/* Full-area zoom image */}
+          {/* Full-area zoom image with adjacent navigation nodes */}
           <div style={{ position: "absolute", inset: 0 }}>
-            <ZoomImage src={selected.image} alt={`${currentLabel} — ${selected.title}`} onClose={onClose} />
-          </div>
-
-          {/* Navigation Controls Wrapper */}
-          <div style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            pointerEvents: "none",
-            zIndex: 10,
-          }}>
-            <div style={{
-              width: "100%",
-              maxWidth: "calc(90vh * 0.75 + 120px)", /* 3/4 aspect ratio + 120px for buttons */
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "0 16px",
-            }}>
-              {hasPrev ? (
-                <button
-                  onClick={onPrev}
-                  aria-label="Página anterior"
-                  style={{
-                    pointerEvents: "auto",
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "rgba(0,0,0,0.55)",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    transition: "background 0.15s",
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
-                  onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
-                >
-                  <ChevronLeft style={{ width: 28, height: 28, color: "#fff" }} />
-                </button>
-              ) : <div style={{ width: 48 }} />}
-
-              {hasNext ? (
-                <button
-                  onClick={onNext}
-                  aria-label="Próxima página"
-                  style={{
-                    pointerEvents: "auto",
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    background: "rgba(0,0,0,0.55)",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    transition: "background 0.15s",
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
-                  onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
-                >
-                  <ChevronRight style={{ width: 28, height: 28, color: "#fff" }} />
-                </button>
-              ) : <div style={{ width: 48 }} />}
-            </div>
+            <ZoomImage 
+              src={selected.image} 
+              alt={`${currentLabel} — ${selected.title}`} 
+              onClose={onClose} 
+              leftNode={
+                hasPrev ? (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onPrev(); }}
+                    aria-label="Página anterior"
+                    style={{
+                      pointerEvents: "auto",
+                      width: 64,
+                      height: 64,
+                      borderRadius: "50%",
+                      background: "rgba(0,0,0,0.55)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "background 0.15s",
+                      zIndex: 10,
+                      flexShrink: 0,
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+                  >
+                    <ChevronLeft style={{ width: 40, height: 40, color: "#fff" }} />
+                  </button>
+                ) : <div style={{ width: 64, flexShrink: 0 }} />
+              }
+              rightNode={
+                hasNext ? (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onNext(); }}
+                    aria-label="Próxima página"
+                    style={{
+                      pointerEvents: "auto",
+                      width: 64,
+                      height: 64,
+                      borderRadius: "50%",
+                      background: "rgba(0,0,0,0.55)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "background 0.15s",
+                      zIndex: 10,
+                      flexShrink: 0,
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+                  >
+                    <ChevronRight style={{ width: 40, height: 40, color: "#fff" }} />
+                  </button>
+                ) : <div style={{ width: 64, flexShrink: 0 }} />
+              }
+            />
           </div>
 
           {/* Floating close button — top right */}

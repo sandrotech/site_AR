@@ -6,6 +6,18 @@ import { motion, AnimatePresence } from "framer-motion"
 import { X, Calendar, ChevronRight, ChevronLeft, Bell, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
+// ─── Mobile detection hook ─────────────────────────────────────────────────
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
+  return isMobile
+}
+
 // ─── Types & Data ──────────────────────────────────────────────────────────────
 
 type Flyer = { id: number; title: string; image: string; validUntil: string }
@@ -32,7 +44,7 @@ const flyers: Record<string, Flyer[]> = {
 // ─── Minimal Zoom Viewer ───────────────────────────────────────────────────────
 // Mouse wheel zoom (desktop) + pinch-to-zoom (mobile) + drag when zoomed
 
-function ZoomImage({ src, alt, onClose, leftNode, rightNode, closeNode }: { src: string; alt: string; onClose: () => void; leftNode?: React.ReactNode; rightNode?: React.ReactNode; closeNode?: React.ReactNode }) {
+function ZoomImage({ src, alt, onClose, leftNode, rightNode, closeNode, isMobile }: { src: string; alt: string; onClose: () => void; leftNode?: React.ReactNode; rightNode?: React.ReactNode; closeNode?: React.ReactNode; isMobile?: boolean }) {
   const [scale, setScale] = useState(1)
   const [pos, setPos] = useState({ x: 0, y: 0 })
   const scaleRef = useRef(1)
@@ -152,7 +164,7 @@ function ZoomImage({ src, alt, onClose, leftNode, rightNode, closeNode }: { src:
           alt={alt}
           draggable={false}
           style={{
-            maxWidth: "calc(100vw - 200px)", // Leaves room for 64px buttons + gaps
+            maxWidth: isMobile ? "calc(100vw - 32px)" : "calc(100vw - 200px)", // More space on mobile
             maxHeight: "90vh", // Using 90vh to ensure it respects viewport height precisely
             objectFit: "contain",
             display: "block",
@@ -381,6 +393,7 @@ function ViewerPortal({
   hasPrev: boolean
 }) {
   const [mounted, setMounted] = useState(false)
+  const isMobile = useIsMobile()
   useEffect(() => { setMounted(true) }, [])
 
   // Keyboard navigation
@@ -417,95 +430,196 @@ function ViewerPortal({
             justifyContent: "center",
           }}
         >
-          {/* Full-area zoom image with adjacent navigation nodes */}
-          <div style={{ position: "absolute", inset: 0 }}>
-            <ZoomImage 
-              src={selected.image} 
-              alt={`${currentLabel} — ${selected.title}`} 
-              onClose={onClose} 
-              leftNode={
-                hasPrev ? (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); onPrev(); }}
-                    aria-label="Página anterior"
-                    style={{
-                      pointerEvents: "auto",
-                      width: 64,
-                      height: 64,
-                      borderRadius: "50%",
-                      background: "rgba(0,0,0,0.55)",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      transition: "background 0.15s",
-                      zIndex: 10,
-                      flexShrink: 0,
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
-                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
-                  >
-                    <ChevronLeft style={{ width: 40, height: 40, color: "#fff" }} />
-                  </button>
-                ) : <div style={{ width: 64, flexShrink: 0 }} />
-              }
-              rightNode={
-                hasNext ? (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); onNext(); }}
-                    aria-label="Próxima página"
-                    style={{
-                      pointerEvents: "auto",
-                      width: 64,
-                      height: 64,
-                      borderRadius: "50%",
-                      background: "rgba(0,0,0,0.55)",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      transition: "background 0.15s",
-                      zIndex: 10,
-                      flexShrink: 0,
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
-                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
-                  >
-                    <ChevronRight style={{ width: 40, height: 40, color: "#fff" }} />
-                  </button>
-                ) : <div style={{ width: 64, flexShrink: 0 }} />
-              }
-              closeNode={
-                <button
-                  onClick={(e) => { e.stopPropagation(); onClose(); }}
-                  aria-label="Fechar (ESC)"
+          {isMobile ? (
+            // ─── MOBILE LAYOUT ────────────────────────────────────────────────────
+            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column" }}>
+              {/* Image area — takes all space above the nav bar */}
+              <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
+                <ZoomImage
+                  src={selected.image}
+                  alt={`${currentLabel} — ${selected.title}`}
+                  onClose={onClose}
+                  isMobile={true}
+                  closeNode={
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onClose(); }}
+                      aria-label="Fechar (ESC)"
+                      style={{
+                        position: "absolute",
+                        top: -14,
+                        right: -14,
+                        zIndex: 20,
+                        width: 40,
+                        height: 40,
+                        borderRadius: "50%",
+                        background: "rgba(0,0,0,0.65)",
+                        border: "1px solid rgba(255,255,255,0.2)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        pointerEvents: "auto",
+                      }}
+                    >
+                      <X style={{ width: 18, height: 18, color: "#fff" }} />
+                    </button>
+                  }
+                />
+              </div>
+
+              {/* Bottom nav bar — prev / page indicator / next */}
+              {(hasPrev || hasNext) && (
+                <div
                   style={{
-                    position: "absolute",
-                    top: -16,
-                    right: -16,
-                    zIndex: 20,
-                    width: 44,
-                    height: 44,
-                    borderRadius: "50%",
-                    background: "rgba(0,0,0,0.55)",
-                    border: "1px solid rgba(255,255,255,0.15)",
+                    flexShrink: 0,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    cursor: "pointer",
-                    transition: "background 0.15s",
-                    pointerEvents: "auto",
+                    gap: 24,
+                    padding: "12px 24px",
+                    background: "rgba(0,0,0,0.45)",
+                    backdropFilter: "blur(8px)",
+                    WebkitBackdropFilter: "blur(8px)",
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(220,38,38,0.85)")}
-                  onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
                 >
-                  <X style={{ width: 20, height: 20, color: "#fff" }} />
-                </button>
-              }
-            />
-          </div>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onPrev(); }}
+                    aria-label="Página anterior"
+                    disabled={!hasPrev}
+                    style={{
+                      width: 52,
+                      height: 52,
+                      borderRadius: "50%",
+                      background: hasPrev ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: hasPrev ? "pointer" : "default",
+                      opacity: hasPrev ? 1 : 0.3,
+                    }}
+                  >
+                    <ChevronLeft style={{ width: 32, height: 32, color: "#fff" }} />
+                  </button>
+
+                  <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, minWidth: 60, textAlign: "center" }}>
+                    {selected.title}
+                  </span>
+
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onNext(); }}
+                    aria-label="Próxima página"
+                    disabled={!hasNext}
+                    style={{
+                      width: 52,
+                      height: 52,
+                      borderRadius: "50%",
+                      background: hasNext ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: hasNext ? "pointer" : "default",
+                      opacity: hasNext ? 1 : 0.3,
+                    }}
+                  >
+                    <ChevronRight style={{ width: 32, height: 32, color: "#fff" }} />
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            // ─── DESKTOP LAYOUT (unchanged) ──────────────────────────────────────────
+            <div style={{ position: "absolute", inset: 0 }}>
+              <ZoomImage
+                src={selected.image}
+                alt={`${currentLabel} — ${selected.title}`}
+                onClose={onClose}
+                isMobile={false}
+                leftNode={
+                  hasPrev ? (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onPrev(); }}
+                      aria-label="Página anterior"
+                      style={{
+                        pointerEvents: "auto",
+                        width: 64,
+                        height: 64,
+                        borderRadius: "50%",
+                        background: "rgba(0,0,0,0.55)",
+                        border: "1px solid rgba(255,255,255,0.15)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        transition: "background 0.15s",
+                        zIndex: 10,
+                        flexShrink: 0,
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+                    >
+                      <ChevronLeft style={{ width: 40, height: 40, color: "#fff" }} />
+                    </button>
+                  ) : <div style={{ width: 64, flexShrink: 0 }} />
+                }
+                rightNode={
+                  hasNext ? (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onNext(); }}
+                      aria-label="Próxima página"
+                      style={{
+                        pointerEvents: "auto",
+                        width: 64,
+                        height: 64,
+                        borderRadius: "50%",
+                        background: "rgba(0,0,0,0.55)",
+                        border: "1px solid rgba(255,255,255,0.15)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        transition: "background 0.15s",
+                        zIndex: 10,
+                        flexShrink: 0,
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+                    >
+                      <ChevronRight style={{ width: 40, height: 40, color: "#fff" }} />
+                    </button>
+                  ) : <div style={{ width: 64, flexShrink: 0 }} />
+                }
+                closeNode={
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onClose(); }}
+                    aria-label="Fechar (ESC)"
+                    style={{
+                      position: "absolute",
+                      top: -16,
+                      right: -16,
+                      zIndex: 20,
+                      width: 44,
+                      height: 44,
+                      borderRadius: "50%",
+                      background: "rgba(0,0,0,0.55)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "background 0.15s",
+                      pointerEvents: "auto",
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(220,38,38,0.85)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+                  >
+                    <X style={{ width: 20, height: 20, color: "#fff" }} />
+                  </button>
+                }
+              />
+            </div>
+          )}
 
         </motion.div>
       )}

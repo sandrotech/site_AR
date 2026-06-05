@@ -3,10 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import {
-  X, Calendar, Download, ChevronRight, ZoomIn, ZoomOut,
-  RotateCcw, Bell, Bookmark, Sparkles
-} from "lucide-react"
+import { X, Calendar, ChevronRight, Bell, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // ─── Types & Data ──────────────────────────────────────────────────────────────
@@ -32,30 +29,64 @@ const flyers: Record<string, Flyer[]> = {
   ],
 }
 
-// ─── Pinch-to-Zoom Viewer ─────────────────────────────────────────────────────
+// ─── Minimal Zoom Viewer ───────────────────────────────────────────────────────
+// Mouse wheel zoom (desktop) + pinch-to-zoom (mobile) + drag when zoomed
 
-function PinchViewer({ src, alt }: { src: string; alt: string }) {
+function ZoomImage({ src, alt }: { src: string; alt: string }) {
   const [scale, setScale] = useState(1)
-  const [origin, setOrigin] = useState({ x: 0, y: 0 })
+  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const scaleRef = useRef(1)
+  const posRef = useRef({ x: 0, y: 0 })
   const lastDist = useRef<number | null>(null)
-  const imgRef = useRef<HTMLDivElement>(null)
   const dragging = useRef(false)
   const lastTouch = useRef({ x: 0, y: 0 })
+  const lastMouse = useRef({ x: 0, y: 0 })
 
-  const reset = () => { setScale(1); setOrigin({ x: 0, y: 0 }) }
+  const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
 
-  const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v))
+  const applyScale = useCallback((next: number) => {
+    const s = clamp(next, 1, 6)
+    scaleRef.current = s
+    setScale(s)
+    if (s === 1) { posRef.current = { x: 0, y: 0 }; setPos({ x: 0, y: 0 }) }
+  }, [])
 
+  // ── Mouse wheel ────────────────────────────────────────────────────────────
+  const onWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault()
+    const delta = e.deltaY < 0 ? 0.15 : -0.15
+    applyScale(scaleRef.current + delta)
+  }, [applyScale])
+
+  // ── Mouse drag ─────────────────────────────────────────────────────────────
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    if (scaleRef.current <= 1) return
+    dragging.current = true
+    lastMouse.current = { x: e.clientX, y: e.clientY }
+  }, [])
+
+  const onMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!dragging.current) return
+    const dx = e.clientX - lastMouse.current.x
+    const dy = e.clientY - lastMouse.current.y
+    lastMouse.current = { x: e.clientX, y: e.clientY }
+    posRef.current = { x: posRef.current.x + dx, y: posRef.current.y + dy }
+    setPos({ ...posRef.current })
+  }, [])
+
+  const onMouseUp = useCallback(() => { dragging.current = false }, [])
+
+  // ── Touch pinch ────────────────────────────────────────────────────────────
   const onTouchStart = useCallback((e: React.TouchEvent) => {
     if (e.touches.length === 2) {
       const dx = e.touches[0].clientX - e.touches[1].clientX
       const dy = e.touches[0].clientY - e.touches[1].clientY
       lastDist.current = Math.hypot(dx, dy)
-    } else if (e.touches.length === 1 && scale > 1) {
+    } else if (e.touches.length === 1 && scaleRef.current > 1) {
       dragging.current = true
       lastTouch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
     }
-  }, [scale])
+  }, [])
 
   const onTouchMove = useCallback((e: React.TouchEvent) => {
     e.preventDefault()
@@ -65,77 +96,61 @@ function PinchViewer({ src, alt }: { src: string; alt: string }) {
       const dist = Math.hypot(dx, dy)
       const ratio = dist / lastDist.current
       lastDist.current = dist
-      setScale(s => clamp(s * ratio, 1, 5))
+      applyScale(scaleRef.current * ratio)
     } else if (e.touches.length === 1 && dragging.current) {
       const dx = e.touches[0].clientX - lastTouch.current.x
       const dy = e.touches[0].clientY - lastTouch.current.y
       lastTouch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
-      setOrigin(o => ({ x: o.x + dx, y: o.y + dy }))
+      posRef.current = { x: posRef.current.x + dx, y: posRef.current.y + dy }
+      setPos({ ...posRef.current })
     }
-  }, [])
+  }, [applyScale])
 
   const onTouchEnd = useCallback(() => {
     lastDist.current = null
     dragging.current = false
-    if (scale <= 1) setOrigin({ x: 0, y: 0 })
-  }, [scale])
+    if (scaleRef.current <= 1) { posRef.current = { x: 0, y: 0 }; setPos({ x: 0, y: 0 }) }
+  }, [])
 
   return (
-    <div className="flex flex-col h-full bg-black">
-      {/* Zoom bar */}
-      <div className="flex items-center justify-center gap-4 px-4 py-2.5 bg-slate-900/90 backdrop-blur-sm shrink-0">
-        <button onClick={() => setScale(s => { const n = clamp(s - 0.5, 1, 5); if (n === 1) setOrigin({ x: 0, y: 0 }); return n })}
-          disabled={scale <= 1}
-          className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-30 text-white transition-all active:scale-90"
-          aria-label="Diminuir">
-          <ZoomOut className="w-4 h-4" />
-        </button>
-        <span className="text-white text-xs font-bold tabular-nums w-12 text-center">{Math.round(scale * 100)}%</span>
-        <button onClick={() => setScale(s => clamp(s + 0.5, 1, 5))}
-          disabled={scale >= 5}
-          className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-30 text-white transition-all active:scale-90"
-          aria-label="Ampliar">
-          <ZoomIn className="w-4 h-4" />
-        </button>
-        <button onClick={reset} disabled={scale === 1}
-          className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-30 text-white transition-all active:scale-90"
-          aria-label="Resetar">
-          <RotateCcw className="w-3.5 h-3.5" />
-        </button>
-        <span className="text-slate-500 text-[10px] ml-1 hidden sm:inline">Pinch ou use os botões</span>
-      </div>
-
-      {/* Image container — fills ALL remaining space */}
-      <div
-        className="flex-1 overflow-hidden flex items-center justify-center touch-none"
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-        onDoubleClick={() => scale === 1 ? setScale(2.5) : reset()}
-        ref={imgRef}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={src}
-          alt={alt}
-          draggable={false}
-          className="select-none pointer-events-none"
-          style={{
-            maxWidth: "100%",
-            maxHeight: "100%",
-            objectFit: "contain",
-            transform: `translate(${origin.x}px, ${origin.y}px) scale(${scale})`,
-            transition: dragging.current ? "none" : "transform 0.15s ease",
-            transformOrigin: "center center",
-          }}
-        />
-      </div>
-
-      {scale === 1 && (
-        <div className="py-2 text-center shrink-0">
-          <span className="text-slate-600 text-[10px]">Toque 2× para ampliar • Pinche com 2 dedos</span>
-        </div>
-      )}
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#000",
+        overflow: "hidden",
+        cursor: scale > 1 ? (dragging.current ? "grabbing" : "grab") : "default",
+        touchAction: "none",
+        userSelect: "none",
+      }}
+      onWheel={onWheel}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMouseUp}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        draggable={false}
+        style={{
+          maxWidth: "100%",
+          maxHeight: "100%",
+          objectFit: "contain",
+          display: "block",
+          transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
+          transition: dragging.current ? "none" : "transform 0.12s ease-out",
+          transformOrigin: "center center",
+          pointerEvents: "none",
+        }}
+      />
     </div>
   )
 }
@@ -344,69 +359,47 @@ function ViewerPortal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
+          transition={{ duration: 0.2 }}
           style={{
             position: "fixed",
             inset: 0,
             zIndex: 99999,
-            display: "flex",
-            flexDirection: "column",
             background: "#000",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          {/* Modal header */}
-          <div className="flex items-center justify-between px-3 sm:px-5 py-3 bg-slate-900 border-b border-slate-800 shrink-0">
-            <div className="flex items-center gap-3 min-w-0">
-              <Bookmark className="w-4 h-4 text-orange-400 shrink-0" />
-              <div className="min-w-0">
-                <p className="text-white font-bold text-sm leading-tight line-clamp-1">{currentLabel} — {selected.title}</p>
-                <p className="text-slate-400 text-[10px] flex items-center gap-1 mt-0.5">
-                  <Calendar className="w-3 h-3 text-orange-400 shrink-0" />
-                  Válido até {selected.validUntil}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0 ml-2">
-              <button
-                onClick={() => {
-                  const a = document.createElement("a")
-                  a.href = selected.image
-                  a.download = `encarte-${selected.id}.jpg`
-                  a.click()
-                }}
-                className="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-all active:scale-90"
-                aria-label="Baixar"
-              >
-                <Download className="w-4 h-4" />
-              </button>
-              <button
-                onClick={onClose}
-                className="p-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl transition-all active:scale-90 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                aria-label="Fechar"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+          {/* Full-area zoom image */}
+          <div style={{ position: "absolute", inset: 0 }}>
+            <ZoomImage src={selected.image} alt={`${currentLabel} — ${selected.title}`} />
           </div>
 
-          {/* Viewer */}
-          <div style={{ flex: 1, minHeight: 0 }}>
-            <PinchViewer src={selected.image} alt={`${currentLabel} — ${selected.title}`} />
-          </div>
-
-          {/* Modal footer */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 bg-slate-900 border-t border-slate-800 shrink-0">
-            <p className="text-slate-400 text-xs text-center sm:text-left">
-              Gostou? Entre no grupo e receba os próximos encartes no WhatsApp!
-            </p>
-            <button
-              onClick={() => window.open("https://wa.me/5585982075102", "_blank")}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all active:scale-95 min-h-[44px]"
-            >
-              Receber no WhatsApp <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          {/* Floating close button — top right */}
+          <button
+            onClick={onClose}
+            aria-label="Fechar (ESC)"
+            style={{
+              position: "absolute",
+              top: 16,
+              right: 16,
+              zIndex: 10,
+              width: 44,
+              height: 44,
+              borderRadius: "50%",
+              background: "rgba(0,0,0,0.55)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              transition: "background 0.15s",
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(220,38,38,0.85)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+          >
+            <X style={{ width: 20, height: 20, color: "#fff" }} />
+          </button>
         </motion.div>
       )}
     </AnimatePresence>,

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
+import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   X, Calendar, Download, ChevronRight, ZoomIn, ZoomOut,
@@ -310,74 +311,105 @@ export function EncartesPage() {
         </main>
       </div>
 
-      {/* ─── Fullscreen Modal / Viewer ───────────────────────── */}
-      <AnimatePresence>
-        {selected && (
-          <motion.div
-            key="viewer"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="fixed inset-0 flex flex-col bg-black"
-            style={{ zIndex: 99999 }}
-          >
-            {/* Modal header */}
-            <div className="flex items-center justify-between px-3 sm:px-5 py-3 bg-slate-900 border-b border-slate-800 shrink-0">
-              <div className="flex items-center gap-3 min-w-0">
-                <Bookmark className="w-4 h-4 text-orange-400 shrink-0" />
-                <div className="min-w-0">
-                  <p className="text-white font-bold text-sm leading-tight line-clamp-1">{currentLabel} — {selected.title}</p>
-                  <p className="text-slate-400 text-[10px] flex items-center gap-1 mt-0.5">
-                    <Calendar className="w-3 h-3 text-orange-400 shrink-0" />
-                    Válido até {selected.validUntil}
-                  </p>
-                </div>
-              </div>
+      {/* Modal rendered via portal to escape PageTransition stacking context */}
+      <ViewerPortal
+        selected={selected}
+        currentLabel={currentLabel}
+        onClose={close}
+      />
+    </>
+  )
+}
 
-              <div className="flex items-center gap-2 shrink-0 ml-2">
-                <button
-                  onClick={() => {
-                    const a = document.createElement("a")
-                    a.href = selected.image
-                    a.download = `encarte-${selected.id}.jpg`
-                    a.click()
-                  }}
-                  className="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-all active:scale-90"
-                  aria-label="Baixar"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={close}
-                  className="p-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl transition-all active:scale-90 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label="Fechar"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+// ─── Portal wrapper — escapes PageTransition filter/transform stacking context ─
+
+function ViewerPortal({
+  selected,
+  currentLabel,
+  onClose,
+}: {
+  selected: Flyer | null
+  currentLabel: string
+  onClose: () => void
+}) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  if (!mounted || typeof document === "undefined") return null
+
+  return createPortal(
+    <AnimatePresence>
+      {selected && (
+        <motion.div
+          key="viewer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99999,
+            display: "flex",
+            flexDirection: "column",
+            background: "#000",
+          }}
+        >
+          {/* Modal header */}
+          <div className="flex items-center justify-between px-3 sm:px-5 py-3 bg-slate-900 border-b border-slate-800 shrink-0">
+            <div className="flex items-center gap-3 min-w-0">
+              <Bookmark className="w-4 h-4 text-orange-400 shrink-0" />
+              <div className="min-w-0">
+                <p className="text-white font-bold text-sm leading-tight line-clamp-1">{currentLabel} — {selected.title}</p>
+                <p className="text-slate-400 text-[10px] flex items-center gap-1 mt-0.5">
+                  <Calendar className="w-3 h-3 text-orange-400 shrink-0" />
+                  Válido até {selected.validUntil}
+                </p>
               </div>
             </div>
 
-            {/* Viewer — takes all remaining height */}
-            <div className="flex-1 min-h-0">
-              <PinchViewer src={selected.image} alt={`${currentLabel} — ${selected.title}`} />
-            </div>
-
-            {/* Modal footer */}
-            <div className="flex flex-col xs:flex-row items-center justify-between gap-3 px-4 py-3 bg-slate-900 border-t border-slate-800 shrink-0">
-              <p className="text-slate-400 text-xs text-center xs:text-left">
-                Gostou? Entre no grupo e receba os próximos encartes no WhatsApp!
-              </p>
+            <div className="flex items-center gap-2 shrink-0 ml-2">
               <button
-                onClick={() => window.open("https://wa.me/5585982075102", "_blank")}
-                className="w-full xs:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all active:scale-95 min-h-[44px]"
+                onClick={() => {
+                  const a = document.createElement("a")
+                  a.href = selected.image
+                  a.download = `encarte-${selected.id}.jpg`
+                  a.click()
+                }}
+                className="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-all active:scale-90"
+                aria-label="Baixar"
               >
-                Receber no WhatsApp <ChevronRight className="w-3.5 h-3.5" />
+                <Download className="w-4 h-4" />
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl transition-all active:scale-90 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label="Fechar"
+              >
+                <X className="w-5 h-5" />
               </button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+          </div>
+
+          {/* Viewer */}
+          <div style={{ flex: 1, minHeight: 0 }}>
+            <PinchViewer src={selected.image} alt={`${currentLabel} — ${selected.title}`} />
+          </div>
+
+          {/* Modal footer */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 bg-slate-900 border-t border-slate-800 shrink-0">
+            <p className="text-slate-400 text-xs text-center sm:text-left">
+              Gostou? Entre no grupo e receba os próximos encartes no WhatsApp!
+            </p>
+            <button
+              onClick={() => window.open("https://wa.me/5585982075102", "_blank")}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all active:scale-95 min-h-[44px]"
+            >
+              Receber no WhatsApp <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body
   )
 }

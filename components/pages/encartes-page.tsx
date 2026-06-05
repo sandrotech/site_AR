@@ -32,7 +32,7 @@ const flyers: Record<string, Flyer[]> = {
 // ─── Minimal Zoom Viewer ───────────────────────────────────────────────────────
 // Mouse wheel zoom (desktop) + pinch-to-zoom (mobile) + drag when zoomed
 
-function ZoomImage({ src, alt, onClose, leftNode, rightNode }: { src: string; alt: string; onClose: () => void; leftNode?: React.ReactNode; rightNode?: React.ReactNode }) {
+function ZoomImage({ src, alt, onClose, leftNode, rightNode, closeNode }: { src: string; alt: string; onClose: () => void; leftNode?: React.ReactNode; rightNode?: React.ReactNode; closeNode?: React.ReactNode }) {
   const [scale, setScale] = useState(1)
   const [pos, setPos] = useState({ x: 0, y: 0 })
   const scaleRef = useRef(1)
@@ -145,23 +145,26 @@ function ZoomImage({ src, alt, onClose, leftNode, rightNode }: { src: string; al
       }}
     >
       {leftNode}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt={alt}
-        draggable={false}
-        style={{
-          maxWidth: "calc(100% - 200px)", // Leaves room for 64px buttons + gaps
-          maxHeight: "90vh", // Using 90vh to ensure it respects viewport height precisely
-          objectFit: "contain",
-          display: "block",
-          transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
-          transition: dragging.current ? "none" : "transform 0.12s ease-out",
-          transformOrigin: "center center",
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      />
+      <div style={{ position: "relative", display: "flex" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt={alt}
+          draggable={false}
+          style={{
+            maxWidth: "calc(100vw - 200px)", // Leaves room for 64px buttons + gaps
+            maxHeight: "90vh", // Using 90vh to ensure it respects viewport height precisely
+            objectFit: "contain",
+            display: "block",
+            transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
+            transition: dragging.current ? "none" : "transform 0.12s ease-out",
+            transformOrigin: "center center",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
+        {closeNode}
+      </div>
       {rightNode}
     </div>
   )
@@ -474,34 +477,36 @@ function ViewerPortal({
                   </button>
                 ) : <div style={{ width: 64, flexShrink: 0 }} />
               }
+              closeNode={
+                <button
+                  onClick={(e) => { e.stopPropagation(); onClose(); }}
+                  aria-label="Fechar (ESC)"
+                  style={{
+                    position: "absolute",
+                    top: -16,
+                    right: -16,
+                    zIndex: 20,
+                    width: 44,
+                    height: 44,
+                    borderRadius: "50%",
+                    background: "rgba(0,0,0,0.55)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "background 0.15s",
+                    pointerEvents: "auto",
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(220,38,38,0.85)")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+                >
+                  <X style={{ width: 20, height: 20, color: "#fff" }} />
+                </button>
+              }
             />
           </div>
 
-          {/* Floating close button — top right */}
-          <button
-            onClick={onClose}
-            aria-label="Fechar (ESC)"
-            style={{
-              position: "absolute",
-              top: 16,
-              right: 16,
-              zIndex: 10,
-              width: 44,
-              height: 44,
-              borderRadius: "50%",
-              background: "rgba(0,0,0,0.55)",
-              border: "1px solid rgba(255,255,255,0.15)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              transition: "background 0.15s",
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(220,38,38,0.85)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
-          >
-            <X style={{ width: 20, height: 20, color: "#fff" }} />
-          </button>
         </motion.div>
       )}
     </AnimatePresence>,

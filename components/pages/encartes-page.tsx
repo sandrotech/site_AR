@@ -177,7 +177,7 @@ export function EncartesPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex flex-col bg-slate-950/95 backdrop-blur-md"
+            className="fixed inset-0 z-[9999] flex flex-col bg-slate-950/95 backdrop-blur-md"
             onClick={() => setViewerOpen(false)}
           >
             {/* Modal Header */}

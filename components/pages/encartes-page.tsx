@@ -415,62 +415,73 @@ function ViewerPortal({
             <ZoomImage src={selected.image} alt={`${currentLabel} — ${selected.title}`} onClose={onClose} />
           </div>
 
-          {/* Navigation Controls */}
-          {hasPrev && (
-            <button
-              onClick={onPrev}
-              aria-label="Página anterior"
-              style={{
-                position: "absolute",
-                left: 16,
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                width: 48,
-                height: 48,
-                borderRadius: "50%",
-                background: "rgba(0,0,0,0.55)",
-                border: "1px solid rgba(255,255,255,0.15)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                transition: "background 0.15s",
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
-            >
-              <ChevronLeft style={{ width: 28, height: 28, color: "#fff" }} />
-            </button>
-          )}
+          {/* Navigation Controls Wrapper */}
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+            zIndex: 10,
+          }}>
+            <div style={{
+              width: "100%",
+              maxWidth: "calc(90vh * 0.75 + 120px)", /* 3/4 aspect ratio + 120px for buttons */
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "0 16px",
+            }}>
+              {hasPrev ? (
+                <button
+                  onClick={onPrev}
+                  aria-label="Página anterior"
+                  style={{
+                    pointerEvents: "auto",
+                    width: 48,
+                    height: 48,
+                    borderRadius: "50%",
+                    background: "rgba(0,0,0,0.55)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "background 0.15s",
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+                >
+                  <ChevronLeft style={{ width: 28, height: 28, color: "#fff" }} />
+                </button>
+              ) : <div style={{ width: 48 }} />}
 
-          {hasNext && (
-            <button
-              onClick={onNext}
-              aria-label="Próxima página"
-              style={{
-                position: "absolute",
-                right: 16,
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                width: 48,
-                height: 48,
-                borderRadius: "50%",
-                background: "rgba(0,0,0,0.55)",
-                border: "1px solid rgba(255,255,255,0.15)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                transition: "background 0.15s",
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
-            >
-              <ChevronRight style={{ width: 28, height: 28, color: "#fff" }} />
-            </button>
-          )}
+              {hasNext ? (
+                <button
+                  onClick={onNext}
+                  aria-label="Próxima página"
+                  style={{
+                    pointerEvents: "auto",
+                    width: 48,
+                    height: 48,
+                    borderRadius: "50%",
+                    background: "rgba(0,0,0,0.55)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "background 0.15s",
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+                >
+                  <ChevronRight style={{ width: 28, height: 28, color: "#fff" }} />
+                </button>
+              ) : <div style={{ width: 48 }} />}
+            </div>
+          </div>
 
           {/* Floating close button — top right */}
           <button

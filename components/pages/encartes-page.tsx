@@ -45,7 +45,7 @@ function ZoomImage({ src, alt }: { src: string; alt: string }) {
   const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
 
   const applyScale = useCallback((next: number) => {
-    const s = clamp(next, 1, 6)
+    const s = clamp(next, 1, 3) // Restricted max zoom to 3x
     scaleRef.current = s
     setScale(s)
     if (s === 1) { posRef.current = { x: 0, y: 0 }; setPos({ x: 0, y: 0 }) }
@@ -120,7 +120,7 @@ function ZoomImage({ src, alt }: { src: string; alt: string }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#000",
+        background: "transparent",
         overflow: "hidden",
         cursor: scale > 1 ? (dragging.current ? "grabbing" : "grab") : "default",
         touchAction: "none",
@@ -349,6 +349,16 @@ function ViewerPortal({
 }) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
+
+  // Close on ESC key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [onClose])
+
   if (!mounted || typeof document === "undefined") return null
 
   return createPortal(
@@ -364,7 +374,9 @@ function ViewerPortal({
             position: "fixed",
             inset: 0,
             zIndex: 99999,
-            background: "#000",
+            background: "rgba(0, 0, 0, 0.8)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

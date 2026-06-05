@@ -1,0 +1,38 @@
+node_modules/
+.next/
+out/
+build/
+dist/
+coverage/
+
+# Arquivos de Lock (gigantes e desnecessários para a IA ler)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Arquivos de mídia (A IA não lê o conteúdo binário/imagem em si)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp4
+*.svg
+*.ico
+*.woff
+*.woff2
+*.ttf
+*.eot
+
+# Cache e builds
+tsconfig.tsbuildinfo
+.eslintcache
+
+# Diretório do git
+.git/
+
+# Logs e outros
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

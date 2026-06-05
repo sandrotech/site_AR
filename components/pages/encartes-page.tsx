@@ -149,8 +149,8 @@ function ZoomImage({ src, alt, onClose }: { src: string; alt: string; onClose: (
         alt={alt}
         draggable={false}
         style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
+          maxWidth: "90%",
+          maxHeight: "90vh", // Using 90vh to ensure it respects viewport height precisely
           objectFit: "contain",
           display: "block",
           transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,

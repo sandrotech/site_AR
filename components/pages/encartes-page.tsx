@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Calendar, ChevronRight, Bell, Sparkles } from "lucide-react"
+import { X, Calendar, ChevronRight, ChevronLeft, Bell, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // ─── Types & Data ──────────────────────────────────────────────────────────────
@@ -209,9 +209,15 @@ export function EncartesPage() {
   const currentFlyers = flyers[activeCategory] ?? []
   const currentLabel = categories.find(c => c.id === activeCategory)?.label ?? ""
 
-  const close = useCallback(() => setSelected(null), [])
+  const currentIndex = selected ? currentFlyers.findIndex(f => f.id === selected.id) : -1
+  const hasNext = currentIndex >= 0 && currentIndex < currentFlyers.length - 1
+  const hasPrev = currentIndex > 0
 
-  // Escape key
+  const close = useCallback(() => setSelected(null), [])
+  const goNext = useCallback(() => { if (hasNext) setSelected(currentFlyers[currentIndex + 1]) }, [hasNext, currentIndex, currentFlyers])
+  const goPrev = useCallback(() => { if (hasPrev) setSelected(currentFlyers[currentIndex - 1]) }, [hasPrev, currentIndex, currentFlyers])
+
+  // Escape key (moved mostly to Portal, but kept here just in case)
   useEffect(() => {
     const fn = (e: KeyboardEvent) => { if (e.key === "Escape") close() }
     window.addEventListener("keydown", fn)
@@ -331,6 +337,10 @@ export function EncartesPage() {
         selected={selected}
         currentLabel={currentLabel}
         onClose={close}
+        onNext={goNext}
+        onPrev={goPrev}
+        hasNext={hasNext}
+        hasPrev={hasPrev}
       />
     </>
   )
@@ -342,22 +352,32 @@ function ViewerPortal({
   selected,
   currentLabel,
   onClose,
+  onNext,
+  onPrev,
+  hasNext,
+  hasPrev,
 }: {
   selected: Flyer | null
   currentLabel: string
   onClose: () => void
+  onNext: () => void
+  onPrev: () => void
+  hasNext: boolean
+  hasPrev: boolean
 }) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
 
-  // Close on ESC key
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
+      else if (e.key === "ArrowRight") onNext()
+      else if (e.key === "ArrowLeft") onPrev()
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [onClose])
+  }, [onClose, onNext, onPrev])
 
   if (!mounted || typeof document === "undefined") return null
 
@@ -386,6 +406,63 @@ function ViewerPortal({
           <div style={{ position: "absolute", inset: 0 }}>
             <ZoomImage src={selected.image} alt={`${currentLabel} — ${selected.title}`} />
           </div>
+
+          {/* Navigation Controls */}
+          {hasPrev && (
+            <button
+              onClick={onPrev}
+              aria-label="Página anterior"
+              style={{
+                position: "absolute",
+                left: 16,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                width: 48,
+                height: 48,
+                borderRadius: "50%",
+                background: "rgba(0,0,0,0.55)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                transition: "background 0.15s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+            >
+              <ChevronLeft style={{ width: 28, height: 28, color: "#fff" }} />
+            </button>
+          )}
+
+          {hasNext && (
+            <button
+              onClick={onNext}
+              aria-label="Próxima página"
+              style={{
+                position: "absolute",
+                right: 16,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                width: 48,
+                height: 48,
+                borderRadius: "50%",
+                background: "rgba(0,0,0,0.55)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                transition: "background 0.15s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,0,0,0.85)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(0,0,0,0.55)")}
+            >
+              <ChevronRight style={{ width: 28, height: 28, color: "#fff" }} />
+            </button>
+          )}
 
           {/* Floating close button — top right */}
           <button

@@ -1,6 +1,7 @@
 ---
 name: frontend-design
 description: Design thinking and decision-making for web UI. Use when designing components, layouts, color schemes, typography, or creating aesthetic interfaces. Teaches principles, not fixed values.
+when_to_use: "When designing web UI components, choosing color schemes, typography, layouts, or creating aesthetic interfaces. NOT for mobile apps."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
@@ -36,6 +37,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 | Script | Purpose | Usage |
 |--------|---------|-------|
 | `scripts/ux_audit.py` | UX Psychology & Accessibility Audit | `python scripts/ux_audit.py <project_path>` |
+| `scripts/accessibility_checker.py` | Focused accessibility checks (contrast, ARIA, focus) | `python scripts/accessibility_checker.py <project_path>` |
 
 ---
 
@@ -334,7 +336,7 @@ For animation patterns: [animation-guide.md](animation-guide.md), for advanced: 
 
 - **Same colors every project**
 - **Dark + neon as default**
-- **Purple/violet everything (PURPLE BAN ✅)**
+- **Purple/violet as the default (use it only with intent)**
 - **Bento grids for simple landing pages**
 - **Mesh Gradients & Glow Effects**
 - **Same layout structure / Vercel clone**

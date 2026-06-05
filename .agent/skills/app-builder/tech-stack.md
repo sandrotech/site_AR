@@ -10,10 +10,11 @@ Frontend:
   language: TypeScript 5.7+
   styling: Tailwind CSS v4
   state: React 19 Actions / Server Components
-  bundler: Turbopack (Stable for Dev)
+  caching: Next.js 16 Cache Components (Stable)
+  bundler: Turbopack (Stable for Dev & Build)
 
 Backend:
-  runtime: Node.js 23
+  runtime: Node.js 24 (Krypton LTS)
   framework: Next.js API Routes / Hono (for Edge)
   validation: Zod / TypeBox
 
@@ -33,8 +34,8 @@ Monorepo:
 
 | Need | Default | Alternative |
 |------|---------|-------------|
-| Real-time | - | Supabase Realtime, Socket.io |
-| File storage | - | Cloudinary, S3 |
+| Real-time | Supabase Realtime | Socket.io, Ably |
+| File storage | Supabase Storage | Cloudinary, AWS S3 |
 | Payment | Stripe | LemonSqueezy, Paddle |
-| Email | - | Resend, SendGrid |
-| Search | - | Algolia, Typesense |
+| Email | Resend | SendGrid, Postmark |
+| Search | Algolia | Typesense, Orama |

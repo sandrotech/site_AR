@@ -2,7 +2,7 @@
 trigger: always_on
 ---
 
-# GEMINI.md - Antigravity Kit
+# GEMINI.md - AG Kit
 
 > This file defines how the AI behaves in this workspace.
 
@@ -78,7 +78,7 @@ When auto-applying an agent, inform the user:
 | Step | Check | If Unchecked |
 |------|-------|--------------|
 | 1 | Did I identify the correct agent for this domain? | → STOP. Analyze request domain first. |
-| 2 | Did I READ the agent's `.md` file (or recall its rules)? | → STOP. Open `.agent/agents/{agent}.md` |
+| 2 | Did I READ the agent's `.md` file (or recall its rules)? | → STOP. Open `.agents/agent/{agent}.md` |
 | 3 | Did I announce `🤖 Applying knowledge of @[agent]...`? | → STOP. Add announcement before response. |
 | 4 | Did I load required skills from agent's frontmatter? | → STOP. Check `skills:` field and read them. |
 
@@ -109,7 +109,7 @@ When user's prompt is NOT in English:
 
 - **Code**: Concise, direct, no over-engineering. Self-documenting.
 - **Testing**: Mandatory. Pyramid (Unit > Int > E2E) + AAA Pattern.
-- **Performance**: Measure first. Adhere to 2025 standards (Core Web Vitals).
+- **Performance**: Measure first. Adhere to current Core Web Vitals standards.
 - **Infra/Safety**: 5-Phase Deployment. Verify secrets security.
 
 ### 📁 File Dependency Awareness
@@ -120,15 +120,18 @@ When user's prompt is NOT in English:
 2. Identify dependent files
 3. Update ALL affected files together
 
-### 🗺️ System Map Read
+### 🗺️ System Map & Memory Read
 
-> 🔴 **MANDATORY:** Read `ARCHITECTURE.md` at session start to understand Agents, Skills, and Scripts.
+> 🔴 **MANDATORY:** At session start, you MUST read:
+> 1. `.agents/ARCHITECTURE.md` to understand Agents, Skills, and Scripts.
+> 2. `.agents/memory/MEMORY.md` to load persistent project conventions, user preferences, and decisions.
 
-**Path Awareness:**
+**Path Awareness (Note: the project directory name is `.agents` plural):**
 
-- Agents: `.agent/` (Project)
-- Skills: `.agent/skills/` (Project)
-- Runtime Scripts: `.agent/skills/<skill>/scripts/`
+- Agents: `.agents/agent/` (Project)
+- Skills: `.agents/skills/` (Project)
+- Memory: `.agents/memory/` (Project)
+- Runtime Scripts: `.agents/skills/<skill>/scripts/`
 
 ### 🧠 Read → Understand → Apply
 
@@ -182,12 +185,12 @@ When user's prompt is NOT in English:
 
 ### 🏁 Final Checklist Protocol
 
-**Trigger:** When the user says "son kontrolleri yap", "final checks", "çalıştır tüm testleri", or similar phrases.
+**Trigger:** When the user says "run the final checks", "final checks", "run all the tests", or similar phrases.
 
 | Task Stage       | Command                                            | Purpose                        |
 | ---------------- | -------------------------------------------------- | ------------------------------ |
-| **Manual Audit** | `python .agent/scripts/checklist.py .`             | Priority-based project audit   |
-| **Pre-Deploy**   | `python .agent/scripts/checklist.py . --url <URL>` | Full Suite + Performance + E2E |
+| **Manual Audit** | `python .agents/scripts/checklist.py .`             | Priority-based project audit   |
+| **Pre-Deploy**   | `python .agents/scripts/checklist.py . --url <URL>` | Full Suite + Performance + E2E |
 
 **Priority Execution Order:**
 
@@ -198,24 +201,22 @@ When user's prompt is NOT in English:
 - **Completion:** A task is NOT finished until `checklist.py` returns success.
 - **Reporting:** If it fails, fix the **Critical** blockers first (Security/Lint).
 
-**Available Scripts (12 total):**
+**Available Scripts (10 total):**
 
 | Script                     | Skill                 | When to Use         |
 | -------------------------- | --------------------- | ------------------- |
 | `security_scan.py`         | vulnerability-scanner | Always on deploy    |
-| `dependency_analyzer.py`   | vulnerability-scanner | Weekly / Deploy     |
 | `lint_runner.py`           | lint-and-validate     | Every code change   |
 | `test_runner.py`           | testing-patterns      | After logic change  |
 | `schema_validator.py`      | database-design       | After DB change     |
 | `ux_audit.py`              | frontend-design       | After UI change     |
 | `accessibility_checker.py` | frontend-design       | After UI change     |
 | `seo_checker.py`           | seo-fundamentals      | After page change   |
-| `bundle_analyzer.py`       | performance-profiling | Before deploy       |
 | `mobile_audit.py`          | mobile-design         | After mobile change |
 | `lighthouse_audit.py`      | performance-profiling | Before deploy       |
 | `playwright_runner.py`     | webapp-testing        | Before deploy       |
 
-> 🔴 **Agents & Skills can invoke ANY script** via `python .agent/skills/<skill>/scripts/<script>.py`
+> 🔴 **Agents & Skills can invoke ANY script** via `python .agents/skills/<skill>/scripts/<script>.py`
 
 ### 🎭 Gemini Mode Mapping
 
@@ -242,8 +243,8 @@ When user's prompt is NOT in English:
 
 | Task         | Read                            |
 | ------------ | ------------------------------- |
-| Web UI/UX    | `.agent/frontend-specialist.md` |
-| Mobile UI/UX | `.agent/mobile-developer.md`    |
+| Web UI/UX    | `.agents/agent/frontend-specialist.md` |
+| Mobile UI/UX | `.agents/agent/mobile-developer.md`    |
 
 **These agents contain:**
 
@@ -265,8 +266,8 @@ When user's prompt is NOT in English:
 
 ### Key Scripts
 
-- **Verify**: `.agent/scripts/verify_all.py`, `.agent/scripts/checklist.py`
-- **Scanners**: `security_scan.py`, `dependency_analyzer.py`
+- **Verify**: `.agents/scripts/verify_all.py`, `.agents/scripts/checklist.py`
+- **Scanners**: `security_scan.py`
 - **Audits**: `ux_audit.py`, `mobile_audit.py`, `lighthouse_audit.py`, `seo_checker.py`
 - **Test**: `playwright_runner.py`, `test_runner.py`
 

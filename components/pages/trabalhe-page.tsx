@@ -38,6 +38,13 @@ const jobs = [
     type: "CLT - Tempo Integral",
     description: "Manutenção da limpeza e organização do ambiente da loja.",
   },
+  {
+    id: 5,
+    title: "Fiscal de Loja",
+    location: "Parque Dois Irmãos",
+    type: "CLT - Tempo Integral",
+    description: "Fiscalização da loja, prevenção de perdas, zelar pela segurança de clientes e funcionários.",
+  },
 ]
 
 const benefits = [

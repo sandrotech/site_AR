@@ -22,7 +22,7 @@ const contactInfo = [
     {
         icon: MapPin,
         title: "Endereços",
-        content: "Bom Jardim e Bonsucesso",
+        content: "Bom Jardim, Bonsucesso e Parque Dois Irmãos",
         link: "/onde-estamos"
     },
     {

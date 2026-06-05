@@ -36,7 +36,7 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
             onClick={() => setCurrentPage("home")}
           >
             <Image
-              src="/logo/logo_horizontal.png"
+              src="/logo/logo_horizontal.png?v=2"
               alt="Ana Risorlange Supermercado"
               width={240}
               height={60}
@@ -55,8 +55,8 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
                 onMouseEnter={() => setHoveredTab(item.id)}
                 onMouseLeave={() => setHoveredTab(null)}
                 className={`relative px-1 py-2 text-[15px] font-medium transition-colors duration-200 ${currentPage === item.id
-                  ? "text-secondary font-bold"
-                  : "text-white/90 hover:text-white"
+                  ? "text-white font-bold"
+                  : "text-white/80 hover:text-white"
                   }`}
               >
                 <span>{item.label}</span>
@@ -65,7 +65,7 @@ export function Header({ currentPage, setCurrentPage }: HeaderProps) {
                 {currentPage === item.id && (
                   <motion.div
                     layoutId="activeUnderline"
-                    className="absolute bottom-0 left-0 right-0 h-[3px] bg-secondary rounded-full"
+                    className="absolute bottom-0 left-0 right-0 h-[3px] bg-white rounded-full"
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />
                 )}

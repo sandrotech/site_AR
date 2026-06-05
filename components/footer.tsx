@@ -5,6 +5,7 @@ import React from "react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, MapPin, Phone, Clock, Facebook, Instagram, Star, ShoppingBasket } from "lucide-react"
+import Image from "next/image"
 
 interface FooterSectionProps {
   title: string
@@ -26,14 +27,14 @@ function FooterSection({ title, children, defaultOpen = false }: FooterSectionPr
       </button>
       <h3 className="hidden md:block font-semibold text-primary-foreground mb-4">{title}</h3>
       <AnimatePresence>
-        {(isOpen || typeof window !== "undefined" && window.innerWidth >= 768) && (
+        {isOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden md:overflow-visible"
+            className="overflow-hidden md:hidden"
           >
-            <div className="pb-4 md:pb-0">{children}</div>
+            <div className="pb-4">{children}</div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -46,19 +47,18 @@ export function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-8 md:py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-0 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 lg:gap-6">
           {/* Logo & About */}
           <div className="py-4 md:py-0">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="relative">
-                <ShoppingBasket className="h-10 w-10 text-secondary" />
-                <Star className="h-5 w-5 text-secondary absolute -top-1 -right-1 fill-secondary" />
-              </div>
-              <div>
-                <span className="text-secondary font-bold text-xl">Ana</span>
-                <span className="text-primary-foreground font-bold text-xl ml-1">Risorlange</span>
-                <span className="text-secondary text-xs block -mt-1">SUPERMERCADO</span>
-              </div>
+            <div className="mb-6 inline-block bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-lg border border-white/20">
+              <Image 
+                src="/logo/logo_horizontal.png" 
+                alt="Ana Risorlange Supermercado" 
+                width={220} 
+                height={60} 
+                className="h-12 w-auto object-contain"
+                priority
+              />
             </div>
             <p className="text-primary-foreground/80 text-sm mb-4">
               Trazendo o melhor para você desde 2010. Qualidade, preço justo e atendimento de excelência.
@@ -105,6 +105,24 @@ export function Footer() {
               <div className="flex items-start gap-2">
                 <Clock className="h-4 w-4 mt-1 shrink-0 text-secondary" />
                 <span>Seg - Sáb: 7h às 21h<br />Dom: 7h às 13h</span>
+              </div>
+            </div>
+          </FooterSection>
+
+          {/* Store 3 */}
+          <FooterSection title="Loja Parque Dois Irmãos">
+            <div className="space-y-3 text-sm text-primary-foreground/80">
+              <div className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 mt-1 shrink-0 text-secondary" />
+                <span>Av. Bernardo Manuel, 8351 - Parque Dois Irmãos, Fortaleza - CE, 60761-281</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4 shrink-0 text-secondary" />
+                <span>(85) 9 9996.0267</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <Clock className="h-4 w-4 mt-1 shrink-0 text-secondary" />
+                <span>Seg - Sáb: 7h às 22h<br />Dom: 7h às 13h</span>
               </div>
             </div>
           </FooterSection>

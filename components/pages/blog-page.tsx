@@ -1,7 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
-import { Calendar, Tag, ArrowRight, Sparkles, TrendingUp, Heart } from "lucide-react"
+import { Calendar, Tag, ArrowRight, Sparkles, TrendingUp, Heart, LayoutList, Megaphone, PartyPopper, Lightbulb, Zap } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -55,9 +56,21 @@ const blogPosts = [
     }
 ]
 
-const categories = ["Todos", "Campanhas", "Eventos", "Dicas", "Novidades"]
+const categories = [
+    { id: "Todos", label: "Todos", icon: LayoutList },
+    { id: "Campanhas", label: "Campanhas", icon: Megaphone },
+    { id: "Eventos", label: "Eventos", icon: PartyPopper },
+    { id: "Dicas", label: "Dicas", icon: Lightbulb },
+    { id: "Novidades", label: "Novidades", icon: Zap }
+]
 
 export function BlogPage() {
+    const [activeCategory, setActiveCategory] = useState("Todos")
+
+    const filteredPosts = blogPosts.filter(post => 
+        activeCategory === "Todos" || post.category === activeCategory
+    )
+
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
@@ -95,25 +108,45 @@ export function BlogPage() {
             </section>
 
             {/* Category Filter */}
-            <section className="py-8 bg-white border-b border-gray-200 sticky top-[88px] z-40">
+            <section className="py-6 bg-slate-50/80 backdrop-blur-md border-b border-gray-200/60 sticky top-[88px] z-40">
                 <div className="container mx-auto px-4">
-                    <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                        {categories.map((category, index) => (
-                            <motion.button
-                                key={category}
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.05 }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className={`px-6 py-2.5 rounded-full font-semibold text-sm whitespace-nowrap transition-all ${index === 0
-                                        ? "bg-primary text-white shadow-lg shadow-primary/30"
-                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide items-center">
+                        {categories.map((cat, index) => {
+                            const Icon = cat.icon
+                            const isActive = activeCategory === cat.id
+                            
+                            return (
+                                <motion.button
+                                    key={cat.id}
+                                    onClick={() => setActiveCategory(cat.id)}
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                    whileHover={{ scale: 1.02, y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className={`relative group flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm whitespace-nowrap transition-all duration-300 ${
+                                        isActive
+                                            ? "bg-white text-primary shadow-lg shadow-blue-900/5 ring-1 ring-primary/20"
+                                            : "bg-white/60 text-slate-500 hover:bg-white hover:text-slate-800 hover:shadow-md ring-1 ring-slate-200/50"
                                     }`}
-                            >
-                                {category}
-                            </motion.button>
-                        ))}
+                                >
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="activeCategoryIndicator"
+                                            className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/5 to-secondary/5"
+                                            initial={false}
+                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                        />
+                                    )}
+                                    <div className={`p-1.5 rounded-xl transition-colors ${
+                                        isActive ? "bg-primary/10 text-primary" : "bg-slate-100 text-slate-400 group-hover:bg-slate-100 group-hover:text-secondary"
+                                    }`}>
+                                        <Icon className="w-4 h-4" />
+                                    </div>
+                                    <span className="relative z-10">{cat.label}</span>
+                                </motion.button>
+                            )
+                        })}
                     </div>
                 </div>
             </section>
@@ -135,7 +168,7 @@ export function BlogPage() {
                     </motion.div>
 
                     <div className="grid md:grid-cols-2 gap-8 mb-20">
-                        {blogPosts.filter(post => post.featured).map((post, index) => (
+                        {filteredPosts.filter(post => post.featured).map((post, index) => (
                             <motion.article
                                 key={post.slug}
                                 initial={{ opacity: 0, y: 30 }}
@@ -201,7 +234,7 @@ export function BlogPage() {
                     </motion.div>
 
                     <div className="grid md:grid-cols-3 gap-8">
-                        {blogPosts.filter(post => !post.featured).map((post, index) => (
+                        {filteredPosts.filter(post => !post.featured).map((post, index) => (
                             <motion.article
                                 key={post.slug}
                                 initial={{ opacity: 0, y: 30 }}

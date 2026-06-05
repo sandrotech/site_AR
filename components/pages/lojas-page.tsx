@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, AnimatePresence, PanInfo } from "framer-motion"
-import { MapPin, Phone, Clock, Search, Locate, Loader2, Check, Navigation, X, ExternalLink, Map, List } from "lucide-react"
+import { MapPin, Phone, Clock, Search, Locate, Loader2, Check, Navigation, X, ExternalLink, Map, List, Car } from "lucide-react"
 import { useState, useEffect, useMemo, useRef } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
@@ -54,6 +54,19 @@ const stores = [
     status: "Aberto",
     description: "Nossa segunda unidade, expandindo nosso atendimento para mais famílias."
   },
+  {
+    id: 3,
+    name: "Loja Parque Dois Irmãos",
+    address: "Av. Bernardo Manuel, 8351 - Parque Dois Irmãos, Fortaleza - CE, 60761-281",
+    phone: "(85) 9 9996.0267",
+    hours: "Seg - Sáb: 7h às 22h | Dom: 7h às 13h",
+    lat: -3.7968,
+    lng: -38.5422,
+    mapUrl: "https://maps.google.com/?q=Av.+Bernardo+Manuel,+8351+-+Parque+Dois+Irmãos,+Fortaleza+-+CE",
+    image: "/loja/loja_parquedoisirmaos.webp",
+    status: "Aberto",
+    description: "Nossa mais nova unidade no Parque Dois Irmãos, oferecendo um espaço moderno e a qualidade de sempre."
+  },
 ]
 
 // Calculate distance between two coordinates (Haversine formula)
@@ -76,6 +89,7 @@ export function LojasPage() {
   const [locationStatus, setLocationStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [distances, setDistances] = useState<Record<number, number>>({})
   const [customIcon, setCustomIcon] = useState<any>(null)
+  const [userIcon, setUserIcon] = useState<any>(null)
   const [showStoreDetail, setShowStoreDetail] = useState(false)
   const [mobileView, setMobileView] = useState<'list' | 'map'>('list')
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false)
@@ -86,15 +100,21 @@ export function LojasPage() {
     if (typeof window !== 'undefined') {
       import('leaflet').then((L) => {
         const icon = L.default.icon({
-          iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-          iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-          shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41]
+          iconUrl: '/logo/logo_carrinho.png',
+          iconSize: [120, 120],
+          iconAnchor: [60, 60],
+          popupAnchor: [0, -60]
         })
         setCustomIcon(icon)
+
+        const uIcon = L.default.divIcon({
+          className: 'bg-transparent border-none',
+          html: '<div class="w-5 h-5 bg-blue-500 rounded-full border-[3px] border-white shadow-[0_0_15px_rgba(59,130,246,0.6)] animate-pulse"></div>',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10],
+          popupAnchor: [0, -10]
+        })
+        setUserIcon(uIcon)
       })
     }
   }, [])
@@ -137,22 +157,44 @@ export function LojasPage() {
     )
   }
 
+  // Request user location on page load
+  useEffect(() => {
+    requestLocation()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Handle map resizing and flying on mobile view switch
+  useEffect(() => {
+    if (mobileView === 'map' && mapRef.current) {
+      setTimeout(() => {
+        if (mapRef.current) {
+          mapRef.current.invalidateSize()
+          if (selectedStore) {
+            mapRef.current.flyTo([selectedStore.lat, selectedStore.lng], 16, {
+              duration: 1.5
+            })
+          }
+        }
+      }, 100)
+    }
+  }, [mobileView, selectedStore])
+
   // Handle store selection - fly to store on map
   const handleStoreClick = (store: typeof stores[0]) => {
     setSelectedStore(store)
     setShowStoreDetail(true)
 
-    // Fly to store location on map
-    if (mapRef.current) {
-      mapRef.current.flyTo([store.lat, store.lng], 16, {
-        duration: 1.5
-      })
-    }
-
     // Switch to map view on mobile
     if (window.innerWidth < 1024) {
       setMobileView('map')
       setBottomSheetOpen(true)
+    } else {
+      // Fly immediately on desktop
+      if (mapRef.current) {
+        mapRef.current.flyTo([store.lat, store.lng], 16, {
+          duration: 1.5
+        })
+      }
     }
   }
 
@@ -170,36 +212,36 @@ export function LojasPage() {
   const mapCenter: [number, number] = [-3.7900, -38.5470]
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Mobile View Toggle - Only visible on mobile */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 bg-white border-b border-gray-200 shadow-sm">
-        <div className="flex">
-          <button
-            onClick={() => setMobileView('list')}
-            className={`flex-1 flex items-center justify-center gap-2 py-4 font-bold transition-all ${mobileView === 'list'
-              ? 'text-primary border-b-4 border-primary bg-blue-50'
-              : 'text-gray-500 hover:bg-gray-50'
-              }`}
-          >
-            <List className="h-5 w-5" />
-            Lojas
-          </button>
-          <button
-            onClick={() => setMobileView('map')}
-            className={`flex-1 flex items-center justify-center gap-2 py-4 font-bold transition-all ${mobileView === 'map'
-              ? 'text-primary border-b-4 border-primary bg-blue-50'
-              : 'text-gray-500 hover:bg-gray-50'
-              }`}
-          >
-            <Map className="h-5 w-5" />
-            Mapa
-          </button>
-        </div>
+    <div className="h-screen bg-white pt-[90px] flex flex-col overflow-hidden">
+      {/* Floating View Toggle - Mobile Only */}
+      <div className="lg:hidden fixed bottom-24 left-1/2 -translate-x-1/2 z-[9999] bg-white/90 backdrop-blur-md rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 p-1 flex items-center w-[280px]">
+        <button
+          onClick={() => setMobileView('list')}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-bold text-sm transition-all ${
+            mobileView === 'list'
+              ? 'bg-primary text-white shadow-md'
+              : 'text-primary hover:bg-gray-50/50'
+          }`}
+        >
+          <List className="h-5 w-5" />
+          Lista
+        </button>
+        <button
+          onClick={() => setMobileView('map')}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-bold text-sm transition-all ${
+            mobileView === 'map'
+              ? 'bg-primary text-white shadow-md'
+              : 'text-primary hover:bg-gray-50/50'
+          }`}
+        >
+          <Map className="h-5 w-5" />
+          Mapa
+        </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row h-screen pt-[73px] lg:pt-0">
+      <div className="flex flex-col lg:flex-row flex-1 overflow-hidden relative">
         {/* Left Sidebar - Store List */}
-        <div className={`w-full lg:w-[400px] bg-white border-r border-gray-200 flex flex-col relative z-10 ${mobileView === 'list' ? 'block' : 'hidden lg:flex'
+        <div className={`w-full lg:w-[400px] bg-white border-r border-gray-200 flex flex-col relative z-10 ${mobileView === 'list' ? 'flex' : 'hidden lg:flex'
           }`}>
           {/* Header */}
           <div className="p-6 border-b border-gray-200">
@@ -217,29 +259,7 @@ export function LojasPage() {
               />
             </div>
 
-            {/* Location Button */}
-            <Button
-              onClick={requestLocation}
-              disabled={locationStatus === 'loading'}
-              className="w-full mt-4 bg-primary hover:bg-blue-800 text-white font-bold py-6 rounded-lg gap-2 transition-all"
-            >
-              {locationStatus === 'loading' ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  Detectando...
-                </>
-              ) : locationStatus === 'success' ? (
-                <>
-                  <Check className="h-5 w-5" />
-                  Localização detectada
-                </>
-              ) : (
-                <>
-                  <Locate className="h-5 w-5" />
-                  Usar minha localização
-                </>
-              )}
-            </Button>
+            {/* Location Button Removed */}
           </div>
 
           {/* Store List */}
@@ -310,19 +330,31 @@ export function LojasPage() {
         {/* Right Side - Map */}
         <div className={`flex-1 relative ${mobileView === 'map' ? 'block' : 'hidden lg:block'
           }`}>
-          {customIcon && (
+          {customIcon && (mobileView === 'map' || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
             <MapContainer
-              center={mapCenter}
-              zoom={12}
+              center={selectedStore ? [selectedStore.lat, selectedStore.lng] : mapCenter}
+              zoom={selectedStore ? 16 : 12}
               scrollWheelZoom={true}
+              doubleClickZoom={true}
+              dragging={true}
+              touchZoom={true}
               className="h-full w-full"
               style={{ height: '100%', width: '100%' }}
               ref={mapRef}
             >
               <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
               />
+
+              {/* User Location Marker */}
+              {userLocation && userIcon && (
+                <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
+                  <Popup>
+                    <div className="font-bold text-gray-900 text-center">Você está aqui</div>
+                  </Popup>
+                </Marker>
+              )}
 
               {filteredStores.map((store) => (
                 <Marker
@@ -333,33 +365,39 @@ export function LojasPage() {
                     click: () => handleStoreClick(store)
                   }}
                 >
-                  <Popup>
-                    <div className="p-2 min-w-[200px]">
-                      <h3 className="font-bold text-primary mb-2">{store.name}</h3>
-                      <div className="space-y-2 text-sm">
+                  <Popup className="custom-popup">
+                    <div className="w-[280px] overflow-hidden rounded-xl">
+                      <div className="relative h-32 w-full">
+                        <img src={store.image} alt={store.name} className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent" />
+                        <h3 className="absolute bottom-2 left-3 right-3 font-bold text-white text-lg leading-tight">{store.name}</h3>
+                      </div>
+                      <div className="p-3 bg-white space-y-3 text-sm">
                         <div className="flex items-start gap-2">
                           <MapPin className="h-4 w-4 text-gray-500 shrink-0 mt-0.5" />
-                          <span className="text-gray-700">{store.address}</span>
+                          <span className="text-gray-700 text-xs">{store.address}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Phone className="h-4 w-4 text-gray-500 shrink-0" />
-                          <a href={`tel:${store.phone.replace(/\D/g, '')}`} className="text-primary hover:underline">
-                            {store.phone}
-                          </a>
+                          <span className="text-gray-700 text-xs">{store.phone}</span>
                         </div>
                         <div className="flex items-start gap-2">
                           <Clock className="h-4 w-4 text-gray-500 shrink-0 mt-0.5" />
-                          <span className="text-gray-700">{store.hours}</span>
+                          <span className="text-gray-700 text-xs">{store.hours}</span>
                         </div>
+                        <div className="flex items-center gap-2">
+                          <Car className="h-4 w-4 text-green-500 shrink-0" />
+                          <span className="text-green-600 font-medium text-xs">Estacionamento disponível para clientes</span>
+                        </div>
+                        <a
+                          href={store.mapUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block mt-2 text-center bg-[#0a2e7c] hover:bg-blue-800 text-white font-bold py-2.5 px-4 rounded-lg transition-colors text-sm"
+                        >
+                          Traçar Rota via Google Maps
+                        </a>
                       </div>
-                      <a
-                        href={store.mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block mt-3 text-center bg-primary hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition-colors"
-                      >
-                        Como chegar
-                      </a>
                     </div>
                   </Popup>
                 </Marker>
@@ -367,20 +405,7 @@ export function LojasPage() {
             </MapContainer>
           )}
 
-          {/* Floating Location Button - Mobile */}
-          <div className="lg:hidden absolute bottom-6 right-6 z-1000">
-            <Button
-              onClick={requestLocation}
-              disabled={locationStatus === 'loading'}
-              className="bg-primary hover:bg-blue-800 text-white font-bold p-4 rounded-full shadow-2xl"
-            >
-              {locationStatus === 'loading' ? (
-                <Loader2 className="h-6 w-6 animate-spin" />
-              ) : (
-                <Locate className="h-6 w-6" />
-              )}
-            </Button>
-          </div>
+          {/* Floating Location Button - Removed */}
         </div>
       </div>
 
@@ -388,14 +413,7 @@ export function LojasPage() {
       <AnimatePresence>
         {bottomSheetOpen && selectedStore && (
           <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setBottomSheetOpen(false)}
-              className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
-            />
+            {/* No Backdrop - Allows map interaction */}
 
             {/* Bottom Sheet */}
             <motion.div

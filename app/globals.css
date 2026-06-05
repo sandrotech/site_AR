@@ -135,3 +135,22 @@
     color: hsl(var(--foreground));
   }
 }
+
+/* Custom Leaflet Popup Styles */
+.custom-popup .leaflet-popup-content-wrapper {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+.custom-popup .leaflet-popup-content {
+  margin: 0;
+  width: 280px !important;
+}
+.custom-popup .leaflet-popup-close-button {
+  color: white !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  padding: 8px 12px 0 0 !important;
+}
+.custom-popup .leaflet-popup-tip {
+  background: white;
+}

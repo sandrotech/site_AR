@@ -32,7 +32,7 @@ const flyers: Record<string, Flyer[]> = {
 // ─── Minimal Zoom Viewer ───────────────────────────────────────────────────────
 // Mouse wheel zoom (desktop) + pinch-to-zoom (mobile) + drag when zoomed
 
-function ZoomImage({ src, alt }: { src: string; alt: string }) {
+function ZoomImage({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
   const [scale, setScale] = useState(1)
   const [pos, setPos] = useState({ x: 0, y: 0 })
   const scaleRef = useRef(1)
@@ -41,6 +41,7 @@ function ZoomImage({ src, alt }: { src: string; alt: string }) {
   const dragging = useRef(false)
   const lastTouch = useRef({ x: 0, y: 0 })
   const lastMouse = useRef({ x: 0, y: 0 })
+  const isDragClick = useRef(false)
 
   const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
 
@@ -60,6 +61,7 @@ function ZoomImage({ src, alt }: { src: string; alt: string }) {
 
   // ── Mouse drag ─────────────────────────────────────────────────────────────
   const onMouseDown = useCallback((e: React.MouseEvent) => {
+    isDragClick.current = false
     if (scaleRef.current <= 1) return
     dragging.current = true
     lastMouse.current = { x: e.clientX, y: e.clientY }
@@ -67,6 +69,7 @@ function ZoomImage({ src, alt }: { src: string; alt: string }) {
 
   const onMouseMove = useCallback((e: React.MouseEvent) => {
     if (!dragging.current) return
+    isDragClick.current = true
     const dx = e.clientX - lastMouse.current.x
     const dy = e.clientY - lastMouse.current.y
     lastMouse.current = { x: e.clientX, y: e.clientY }
@@ -134,6 +137,11 @@ function ZoomImage({ src, alt }: { src: string; alt: string }) {
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !isDragClick.current) {
+          onClose()
+        }
+      }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -404,7 +412,7 @@ function ViewerPortal({
         >
           {/* Full-area zoom image */}
           <div style={{ position: "absolute", inset: 0 }}>
-            <ZoomImage src={selected.image} alt={`${currentLabel} — ${selected.title}`} />
+            <ZoomImage src={selected.image} alt={`${currentLabel} — ${selected.title}`} onClose={onClose} />
           </div>
 
           {/* Navigation Controls */}
